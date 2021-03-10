@@ -32,8 +32,8 @@ def date(): # asks for the date
     date = date + input('Year: ') + '-'
     date = date + input('Month: ') + '-'
     date = date + input('Day: ')
-    return date           
-        
+    return date
+
 def checkJob(jobC):
     jobs = Jobs.select(column = 'id')['id']
     jobCheck = jobC
@@ -43,7 +43,7 @@ def checkJob(jobC):
                 return jobCheck
         print('Job Title doesn\'t exist in database. Please, try again.')
         jobCheck = input('Job Title: ')
-        
+
 
 def cityID(session, city, state, country):
     c = Cities.select(column = 'countryName, stateName, cityName', value = f'{country}, {state}, {city}')
@@ -52,12 +52,12 @@ def cityID(session, city, state, country):
         return addCity(session, city, state, country)
     else:
         return c['id'][0]
-    
+
 def addCity(session, city, state, country):
     id = Base.generateId()
     Cities.insert(session = session, value = f'{id}, {country}, {state}, {city}')
     return id
-    
+
 def addressCheck(session, cityID): # checks until existing address is found and returns it
     address = input('Address: ')
     addressess = Addressess.select(column = 'address, cityId', value = Base.toComma([address, cityID]))
@@ -68,7 +68,7 @@ def addressCheck(session, cityID): # checks until existing address is found and 
         Addressess.insert(session = session, value = adr)
         return id
     return addressess['id'][0]
-        
+
 def storeCheck(id): # asks for input until store exists and returns the store id if it exists
     stores = Stores.select(column = 'id')['id']
     id_check = id
@@ -102,7 +102,7 @@ def addEmployee(session): # adds a new employee to the work.Employees table
     empl = Base.toComma([id, date(), str(input('Salary: ')), ad, str(input('First Name: ')), str(input('Last Name: ')), job, '0', str(input('Insurance: ')), '0', 'A'])
     Employees.insert(session = session, value = empl)
     StoreEmployees.insert(session = session, value = storempl)
-        
+
 @sess
 def addBook(session):
     print('Adding a Book')
@@ -148,14 +148,14 @@ def findSupplier(): # finds supplier id by first name, last name, company name
         if (check):
             print('First Name doesn\'t exist in the database. Please, try again.')
             fnameCheck = input('Supplier First Name: ')
-            
+
     lnameCheck = input('Supplier Last Name: ')
     filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck)
     while(suppliers.loc[filt].empty):
         print('Such supplier doesn\'t exist in the database. Please, try again.')
         lnameCheck = input('Supplier Last Name: ')
         filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck)
-        
+
     cnameCheck = input('Supplier Company Name: ')
     filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck) & (suppliers['companyName'] == cnameCheck)
     while(suppliers.loc[filt].empty):
@@ -199,7 +199,7 @@ def checkBookAmount(session, id):
             return amount
         print('Warehouses can not supply that amount of books. Please, try again.')
         amount = int(input('How many books to supply to the store? : '))
-        
+
 def checkBookStore(session, bookID, storeID):
     num = BookStore.select(column = 'bookId, storeId', value = f'{bookID}, {storeID}')['numberOfBooksInStore']
     if num.empty:
@@ -215,7 +215,7 @@ def populateBookStore(session):
     storeID = storeCheck(input('Store ID: '))
     bookAmount = int(checkBookAmount(session, bookID)) + int(checkBookStore(session, bookID, storeID))
     BookStore.update(session = session, column = 'numberOfBooksInStore', value = f'{bookAmount}', id = f'{bookID}, {storeID}', idVALUE = 'bookId, storeId')
-    
+
 @sess
 def addStore(session):
     ownerID = ''
@@ -237,8 +237,8 @@ def addStore(session):
     storeID, storeAD = checkGenerateIdAddressCity(session)
     storeinfo = Base.toComma([storeID, ownerID, storeAD, input('Tax Percent: ')])
     Stores.insert(session = session, value = storeinfo)
-    
-    
+
+
 
 @sess
 def updateOwners(session):
@@ -277,7 +277,7 @@ def calculateTotal(bookID, amount):
     bookPrice = float(Books.select(column = 'id', value = bookID)['price'][0])
     total = amount * bookPrice
     return round(total, 2)
-    
+
 @sess
 def placeOrder(session):
     print('Placing Order')
@@ -306,12 +306,12 @@ def placeOrder(session):
     info = Base.toComma([buyerID, getGenre(bookID)])
     BuyerGenrePreferences.insert(session = session, value = info)
     updateDaySales(session, d, total)
-    
+
 def checkCreditCard(crd):
     cardNumber = crd
     while True:
         if len(cardNumber) == 16:
-            return cardNumber 
+            return cardNumber
         print('Credit Card number is invalid. Please, try again')
         cardNumber = input('Credit Card Number: ')
 
@@ -328,11 +328,11 @@ def updateDaySales(session, day, total):
 
 def getAuthor(id):
     return Books.select(column = 'id', value = id)['authorId'][0]
-        
+
 def getGenre(id):
     return Books.select(column = 'id', value = id)['genre'][0]
 
-@sess    
+@sess
 def updateSales(session):
     # calculates weekly, monthly, yearly Sales
     pass
@@ -341,6 +341,8 @@ def updateSales(session):
 def addSupplier(session):
     pass
 
+
+## yes
 ########################
 addStore()
 print('Owner and Store Created')
