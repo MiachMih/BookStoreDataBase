@@ -1,0 +1,130 @@
+EmployeeId,firstName,lastName,job,salary,Employee Address,phoneNumber,employee country,employee state,stateName,StoreId,StoreOwner,Store Address,store region,store state
+3,Robert,Williams,Janitor,700,3 Baker st.,202-555-0859,US,TX,Holster,3,Andrew,3 Bridge st.,Brooklyn,AZ
+13,Charles,Anderson,Manager,2400,3 Elton ave.,202-555-0329,US,MA,Austin,3,Andrew,3 Bridge st.,Brooklyn,AZ
+23,Gerald,James,Cashier,1120,1 Clock st.,202-535-2007,US,AL,Boston,3,Andrew,3 Bridge st.,Brooklyn,AZ
+33,Noah,Gray,Cashier,1475,1 Break st.,753-534-2007,US,AZ,Brooklyn,3,Andrew,3 Bridge st.,Brooklyn,AZ
+42,Teresa,Martinez,Logistics Worker,1300,3 Dust st.,202-551-0996,US,AZ,Brooklyn,3,Andrew,3 Bridge st.,Brooklyn,AZ
+52,Sara,Roberts,Supervisor,1470,3 Toll st.,202-455-0996,US,TX,Holster,3,Andrew,3 Bridge st.,Brooklyn,AZ
+62,Alexis,Cooper,Logistics Supervisor,1600,3 Class st.,202-955-0996,US,AZ,Brooklyn,3,Andrew,3 Bridge st.,Brooklyn,AZ
+72,Adam,Kim,IT,2550,3 Sto st.,202-755-0996,US,MA,Austin,3,Andrew,3 Bridge st.,Brooklyn,AZ
+82,Debra,Reed,Accounter,1680,3 Lap st.,202-155-0996,US,MA,Austin,3,Andrew,3 Bridge st.,Brooklyn,AZ
+92,Sara,Martinez,Financer,2100,3 Trel st.,203-555-0996,US,MA,Austin,3,Andrew,3 Bridge st.,Brooklyn,AZ
+102,Nicole,King,Advertiser,1765,3 Plos st.,208-555-0996,US,AL,Boston,3,Andrew,3 Bridge st.,Brooklyn,AZ
+112,Abigail,Cooper,Sales Representative,1270,3 Pro st.,399-595-0996,US,TX,Holster,3,Andrew,3 Bridge st.,Brooklyn,AZ
+122,Alexis,Evans,HR,1100,3 Daf st.,395-595-1996,US,MA,Austin,3,Andrew,3 Bridge st.,Brooklyn,AZ
+7,David,Miller,Janitor,1100,7 Baker st.,202-555-0365,US,AL,Boston,7,Donna,7 Bridge st.,Holster,TX
+17,Daniel,Moore,Manager,2450,7 Elton ave.,202-555-0836,US,AZ,Brooklyn,7,Donna,7 Bridge st.,Holster,TX
+27,Martha,Carter,Cashier,1400,5 Clock st.,202-535-2008,US,AZ,Brooklyn,7,Donna,7 Bridge st.,Holster,TX
+37,Janice,Martinez,Cashier,1200,5 Break st.,292-995-2909,US,MA,Austin,7,Donna,7 Bridge st.,Holster,TX
+46,Charlotte,Morgan,Logistics Worker,1270,4 Place st.,202-515-1008,US,AL,Boston,7,Donna,7 Bridge st.,Holster,TX
+56,Billy,Turner,Supervisor,1670,4 Prep st.,202-455-1008,US,AZ,Brooklyn,7,Donna,7 Bridge st.,Holster,TX
+66,Jacqueline,Scott,Logistics Supervisor,1600,4 Table st.,202-955-1008,US,MA,Austin,7,Donna,7 Bridge st.,Holster,TX
+76,Joe,Long,IT,2250,4 Apl st.,202-755-1008,US,MA,Austin,7,Donna,7 Bridge st.,Holster,TX
+86,Sara,Price,Accounter,1460,4 Plot st.,202-155-1008,US,AL,Boston,7,Donna,7 Bridge st.,Holster,TX
+96,Louis,Roberts,Financer,2680,4 Trick st.,253-595-7968,US,AZ,Brooklyn,7,Donna,7 Bridge st.,Holster,TX
+106,Jacqueline,Reed,Advertiser,1400,4 Las st.,209-555-1008,US,AL,Boston,7,Donna,7 Bridge st.,Holster,TX
+116,Abigail,Roberts,Sales Representative,1230,4 Set st.,382-555-1008,US,MA,Austin,7,Donna,7 Bridge st.,Holster,TX
+126,Stephen,Parker,HR,1270,4 Bloq st.,402-555-1008,US,AZ,Brooklyn,7,Donna,7 Bridge st.,Holster,TX
+8,William,Davis,Janitor,700,8 Baker st.,202-555-0445,US,MA,Austin,8,Emily,8 Bridge st.,Holster,TX
+18,Christopher,Jackson,Manager,2220,8 Elton ave.,202-555-0790,US,AZ,Brooklyn,8,Emily,8 Bridge st.,Holster,TX
+28,Cheryl,Evans,Cashier,1275,6 Clock st.,202-535-3008,US,AZ,Brooklyn,8,Emily,8 Bridge st.,Holster,TX
+38,Teresa,Cooper,Cashier,1175,6 Break st.,397-595-3098,US,MA,Austin,8,Emily,8 Bridge st.,Holster,TX
+47,Richard,Reyes,Logistics Worker,1570,5 Place st.,202-515-2008,US,AL,Boston,8,Emily,8 Bridge st.,Holster,TX
+57,Sara,Parker,Supervisor,1500,5 Prep st.,202-455-2008,US,AL,Boston,8,Emily,8 Bridge st.,Holster,TX
+67,Richard,Morales,Logistics Supervisor,1800,5 Table st.,202-955-2008,US,AL,Boston,8,Emily,8 Bridge st.,Holster,TX
+77,Adam,Wright,IT,3570,5 Apl st.,202-755-2008,US,AZ,Brooklyn,8,Emily,8 Bridge st.,Holster,TX
+87,Nicole,Cooper,Accounter,1860,5 Plot st.,202-155-2008,US,TX,Holster,8,Emily,8 Bridge st.,Holster,TX
+97,Louis,Scott,Financer,2350,5 Trick st.,204-579-2008,US,AL,Boston,8,Emily,8 Bridge st.,Holster,TX
+107,Debra,Kim,Advertiser,1570,5 Las st.,209-555-2008,US,AZ,Brooklyn,8,Emily,8 Bridge st.,Holster,TX
+117,Jacqueline,Nelson,Sales Representative,1300,5 Set st.,392-555-2008,US,TX,Holster,8,Emily,8 Bridge st.,Holster,TX
+127,Joe,Reyes,HR,1350,5 Bloq st.,402-555-2008,US,AL,Boston,8,Emily,8 Bridge st.,Holster,TX
+9,Susan,Rodriguez,Janitor,870,9 Baker st.,202-555-0451,US,AL,Boston,9,Emily,9 Bridge st.,Boston,AL
+19,Betty,Martin,Manager,2300,9 Elton ave.,202-555-0368,US,MA,Austin,9,Emily,9 Bridge st.,Boston,AL
+29,Ann,Martinez,Cashier,1305,7 Clock st.,293-535-5397,US,TX,Holster,9,Emily,9 Bridge st.,Boston,AL
+39,Richard,Martinez,Cashier,1100,7 Break st.,202-515-3008,US,AZ,Brooklyn,9,Emily,9 Bridge st.,Boston,AL
+48,Joe,Kim,Logistics Worker,1330,6 Place st.,662-565-3608,US,AZ,Brooklyn,9,Emily,9 Bridge st.,Boston,AL
+58,Alexis,Hill,Supervisor,1390,6 Prep st.,707-755-3078,US,TX,Holster,9,Emily,9 Bridge st.,Boston,AL
+68,Sara,Carter,Logistics Supervisor,1680,6 Table st.,322-225-3202,US,TX,Holster,9,Emily,9 Bridge st.,Boston,AL
+78,Louis,Turner,IT,2690,6 Apl st.,282-765-3606,US,AL,Boston,9,Emily,9 Bridge st.,Boston,AL
+88,Alexis,Morales,Accounter,1790,6 Plot st.,202-175-3908,US,AL,Boston,9,Emily,9 Bridge st.,Boston,AL
+98,Joe,Morgan,Financer,2900,6 Trick st.,204-955-3008,US,MA,Austin,9,Emily,9 Bridge st.,Boston,AL
+108,Alexis,King,Advertiser,1600,6 Las st.,209-555-3008,US,MA,Austin,9,Emily,9 Bridge st.,Boston,AL
+118,Richard,Carter,Sales Representative,1100,6 Set st.,372-555-3008,US,AL,Boston,9,Emily,9 Bridge st.,Boston,AL
+128,Teresa,King,HR,1100,6 Bloq st.,402-555-3008,US,AZ,Brooklyn,9,Emily,9 Bridge st.,Boston,AL
+6,Michael,Garcia,Janitor,750,6 Baker st.,202-555-0239,US,AZ,Brooklyn,6,Joshua,6 Bridge st.,Boston,AL
+16,Matthew,Lewis,Manager,2500,6 Elton ave.,202-555-0187,US,AL,Boston,6,Joshua,6 Bridge st.,Boston,AL
+26,Andrea,Morgan,Cashier,1500,4 Clock st.,202-535-1008,US,MA,Austin,6,Joshua,6 Bridge st.,Boston,AL
+36,Joe,Martinez,Cashier,1300,4 Break st.,769-535-1008,US,TX,Holster,6,Joshua,6 Bridge st.,Boston,AL
+45,Billy,Parker,Logistics Worker,1300,3 Place st.,202-515-4007,US,AZ,Brooklyn,6,Joshua,6 Bridge st.,Boston,AL
+55,Alexis,Peterson,Supervisor,1270,3 Prep st.,202-455-4007,US,TX,Holster,6,Joshua,6 Bridge st.,Boston,AL
+65,Alexis,Reed,Logistics Supervisor,1570,3 Table st.,202-979-4007,US,AZ,Brooklyn,6,Joshua,6 Bridge st.,Boston,AL
+75,Sara,Foster,IT,2900,3 Apl st.,202-755-4007,US,AZ,Brooklyn,6,Joshua,6 Bridge st.,Boston,AL
+85,Teresa,Peterson,Accounter,1570,3 Plot st.,202-155-4007,US,TX,Holster,6,Joshua,6 Bridge st.,Boston,AL
+95,Abigail,Parker,Financer,2300,3 Trick st.,203-955-4907,US,MA,Austin,6,Joshua,6 Bridge st.,Boston,AL
+105,Richard,Hill,Advertiser,1300,3 Las st.,208-599-4007,US,AZ,Brooklyn,6,Joshua,6 Bridge st.,Boston,AL
+115,Debra,Parker,Sales Representative,1200,3 Set st.,342-555-4007,US,TX,Holster,6,Joshua,6 Bridge st.,Boston,AL
+125,Louis,King,HR,1150,3 Bloq st.,402-555-4007,US,AL,Boston,6,Joshua,6 Bridge st.,Boston,AL
+5,Linda,Jones,Janitor,700,5 Baker st.,202-555-0940,US,TX,Holster,5,Kenneth,5 Bridge st.,Boston,AL
+15,Sarah,Taylor,Manager,1900,5 Elton ave.,242-763-0628,US,MA,Austin,5,Kenneth,5 Bridge st.,Boston,AL
+25,Frances,Kim,Cashier,1340,3 Clock st.,202-535-4007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+35,Jesse,Martinez,Cashier,1400,3 Break st.,352-535-4007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+44,Alexis,Gray,Logistics Worker,1540,2 Place st.,202-515-3007,US,MA,Austin,5,Kenneth,5 Bridge st.,Boston,AL
+54,Billy,Martinez,Supervisor,1300,2 Prep st.,202-455-3007,US,TX,Holster,5,Kenneth,5 Bridge st.,Boston,AL
+64,Teresa,Peterson,Logistics Supervisor,1450,2 Table st.,202-955-3007,US,TX,Holster,5,Kenneth,5 Bridge st.,Boston,AL
+74,Debra,Roberts,IT,3600,2 Apl st.,202-779-3007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+84,Adam,Scott,Accounter,1680,2 Plot st.,202-155-3007,US,AZ,Brooklyn,5,Kenneth,5 Bridge st.,Boston,AL
+94,Alexis,Hill,Financer,1980,2 Trick st.,203-595-3907,US,TX,Holster,5,Kenneth,5 Bridge st.,Boston,AL
+104,Stephen,Foster,Advertiser,1380,2 Las st.,208-595-3007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+114,Joe,Wright,Sales Representative,1175,2 Set st.,352-555-3007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+124,Alexis,Kim,HR,1200,2 Bloq st.,402-555-3007,US,AL,Boston,5,Kenneth,5 Bridge st.,Boston,AL
+4,Jennifer,Brown,Janitor,700,4 Baker st.,202-555-0272,US,AL,Boston,4,Kimberly,4 Bridge st.,Austin,MA
+14,Karen,Thomas,Manager,2000,4 Elton ave.,202-555-0501,US,TX,Holster,4,Kimberly,4 Bridge st.,Austin,MA
+24,Hannah,King,Cashier,1250,2 Clock st.,202-535-3007,US,MA,Austin,4,Kimberly,4 Bridge st.,Austin,MA
+34,Lawrence,James,Cashier,1205,2 Break st.,306-535-3007,US,MA,Austin,4,Kimberly,4 Bridge st.,Austin,MA
+43,Janice,Martinez,Logistics Worker,1450,1 Place st.,202-515-2007,US,TX,Holster,4,Kimberly,4 Bridge st.,Austin,MA
+53,Jacqueline,Long,Supervisor,1280,1 Prep st.,202-455-2007,US,AL,Boston,4,Kimberly,4 Bridge st.,Austin,MA
+63,Billy,James,Logistics Supervisor,1390,1 Table st.,202-955-2007,US,MA,Austin,4,Kimberly,4 Bridge st.,Austin,MA
+73,Alexis,Parker,IT,3000,1 Apl st.,202-755-2007,US,TX,Holster,4,Kimberly,4 Bridge st.,Austin,MA
+83,Alexis,Long,Accounter,1970,1 Plot st.,202-179-2007,US,AZ,Brooklyn,4,Kimberly,4 Bridge st.,Austin,MA
+93,Jacqueline,Reed,Financer,2690,1 Trick st.,223-555-2907,US,AZ,Brooklyn,4,Kimberly,4 Bridge st.,Austin,MA
+103,Abigail,Long,Advertiser,1490,1 Las st.,208-559-2007,US,TX,Holster,4,Kimberly,4 Bridge st.,Austin,MA
+113,Debra,Morgan,Sales Representative,1200,1 Set st.,332-555-2007,US,AL,Boston,4,Kimberly,4 Bridge st.,Austin,MA
+123,Louis,Nelson,HR,1200,1 Bloq st.,402-555-2007,US,TX,Holster,4,Kimberly,4 Bridge st.,Austin,MA
+1,John,Smith,Janitor,700,1 Elton ave.,202-555-0007,US,MA,Austin,1,Steven,1 Bridge st.,Brooklyn,AZ
+11,Joseph,Hernandez,Manager,2000,10 Baker st.,202-555-0628,US,AZ,Brooklyn,1,Steven,1 Bridge st.,Brooklyn,AZ
+21,Keith,Turner,Cashier,1200,2 Block st.,432-937-0335,US,AZ,Brooklyn,1,Steven,1 Bridge st.,Brooklyn,AZ
+31,Arthur,Parker,Cashier,1200,2 Rope st.,202-553-0335,US,AL,Boston,1,Steven,1 Bridge st.,Brooklyn,AZ
+40,Alexis,Turner,Logistics Worker,1200,1 Dust st.,202-551-0987,US,AZ,Brooklyn,1,Steven,1 Bridge st.,Brooklyn,AZ
+50,Billy,Turner,Supervisor,1750,1 Toll st.,202-455-0987,US,MA,Austin,1,Steven,1 Bridge st.,Brooklyn,AZ
+60,Charlotte,Reyes,Logistics Supervisor,1300,1 Class st.,202-955-0987,US,MA,Austin,1,Steven,1 Bridge st.,Brooklyn,AZ
+70,Nicole,Scott,IT,2000,1 Sto st.,202-755-0987,US,AL,Boston,1,Steven,1 Bridge st.,Brooklyn,AZ
+80,Jacqueline,Reyes,Accounter,1490,1 Lap st.,202-155-0987,US,TX,Holster,1,Steven,1 Bridge st.,Brooklyn,AZ
+90,Teresa,Wright,Financer,1900,1 Trel st.,203-195-0987,US,TX,Holster,1,Steven,1 Bridge st.,Brooklyn,AZ
+100,Alexis,Nelson,Advertiser,1800,1 Plos st.,204-595-0987,US,MA,Austin,1,Steven,1 Bridge st.,Brooklyn,AZ
+110,Debra,Peterson,Sales Representative,1350,1 Pro st.,209-555-0987,US,AL,Boston,1,Steven,1 Bridge st.,Brooklyn,AZ
+120,Alexis,Turner,HR,1275,1 Daf st.,389-555-0987,US,TX,Holster,1,Steven,1 Bridge st.,Brooklyn,AZ
+10,Joe,Smith,Janitor,970,2 Baker st.,202-555-0564,US,AZ,Brooklyn,10,Steven,10  Bridge st.,Austin,MA
+20,Paul,Clark,Manager,2100,10 Elton ave.,202-555-0858,US,TX,Holster,10,Steven,10  Bridge st.,Austin,MA
+30,Jean,Roberts,Cashier,1170,1 Rope st.,179-946-1987,US,AL,Boston,10,Steven,10  Bridge st.,Austin,MA
+49,Janice,Carter,Logistics Worker,1420,7 Place st.,202-455-3008,US,MA,Austin,10,Steven,10  Bridge st.,Austin,MA
+59,Sara,Evans,Supervisor,1600,7 Prep st.,202-955-3008,US,MA,Austin,10,Steven,10  Bridge st.,Austin,MA
+69,Alexis,Morgan,Logistics Supervisor,1400,7 Table st.,202-755-3008,US,MA,Austin,10,Steven,10  Bridge st.,Austin,MA
+79,Alexis,Nelson,IT,2840,7 Apl st.,202-155-3008,US,AL,Boston,10,Steven,10  Bridge st.,Austin,MA
+89,Richard,Carter,Accounter,1600,7 Plot st.,223-553-9338,US,MA,Austin,10,Steven,10  Bridge st.,Austin,MA
+99,Richard,Turner,Financer,2790,7 Trick st.,204-555-3608,US,TX,Holster,10,Steven,10  Bridge st.,Austin,MA
+109,Teresa,Price,Advertiser,1300,7 Las st.,209-555-3038,US,AZ,Brooklyn,10,Steven,10  Bridge st.,Austin,MA
+119,Stephen,Wright,Sales Representative,1200,7 Set st.,319-511-3408,US,AL,Boston,10,Steven,10  Bridge st.,Austin,MA
+129,Louis,Wright,HR,1200,7 Bloq st.,692-595-3538,US,MA,Austin,10,Steven,10  Bridge st.,Austin,MA
+2,Dale,Baker,Janitor,900,1 Baker st.,202-555-0682,US,AL,Boston,2,Steven,2 Bridge st.,Boston,AL
+12,Barbara,Wilson,Manager,2100,2 Elton ave.,202-555-0898,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+22,Richard,Cooper,Cashier,1100,3 Block st.,292-535-1911,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+32,Austin,Reyes,Cashier,1450,3 Rope st.,202-553-0996,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+41,Charlotte,Evans,Logistics Worker,1600,2 Dust st.,202-551-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+51,Janice,Reed,Supervisor,1300,2 Toll st.,202-455-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+61,Louis,Gray,Logistics Supervisor,1850,2 Class st.,202-955-0335,US,TX,Holster,2,Steven,2 Bridge st.,Boston,AL
+71,Charlotte,Ross,IT,2300,2 Sto st.,202-755-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+81,Adam,Martinez,Accounter,1560,2 Lap st.,202-155-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+91,Richard,Turner,Financer,2000,2 Trel st.,203-595-0935,US,AL,Boston,2,Steven,2 Bridge st.,Boston,AL
+101,Abigail,Ross,Advertiser,1670,2 Plos st.,998-953-4345,US,AZ,Brooklyn,2,Steven,2 Bridge st.,Boston,AL
+111,Alexis,Morgan,Sales Representative,1100,2 Pro st.,299-595-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
+121,Abigail,King,HR,1400,2 Daf st.,335-555-0335,US,MA,Austin,2,Steven,2 Bridge st.,Boston,AL
