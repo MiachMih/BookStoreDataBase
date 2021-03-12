@@ -34,7 +34,7 @@ def date(): # asks for the date
     date = date + input('Day: ')
     return date
 
-def checkJob(jobC):
+def checkJob(jobC): # checks the input and stops when the existing job title exists.
     jobs = Jobs.select(column = 'id')['id']
     jobCheck = jobC
     while(True):
@@ -45,20 +45,18 @@ def checkJob(jobC):
         jobCheck = input('Job Title: ')
 
 
-def cityID(session, city, state, country):
+def cityID(session, city, state, country): # finds if city ID exists or not, if it doesn't it creates a new entry. Returns the id of the city
     c = Cities.select(column = 'countryName, stateName, cityName', value = f'{country}, {state}, {city}')
     if c.empty:
         print('City isn\'t in the database, adding new entry.')
-        return addCity(session, city, state, country)
+        id = Base.generateId()
+        Cities.insert(session = session, value = f'{id}, {country}, {state}, {city}')
+        return id
     else:
         return c['id'][0]
 
-def addCity(session, city, state, country):
-    id = Base.generateId()
-    Cities.insert(session = session, value = f'{id}, {country}, {state}, {city}')
-    return id
 
-def addressCheck(session, cityID): # checks until existing address is found and returns it
+def addressCheck(session, cityID): # checks if address exists, if not it will add a new entry. Returns id of the address (either existing or new)
     address = input('Address: ')
     addressess = Addressess.select(column = 'address, cityId', value = Base.toComma([address, cityID]))
     if addressess.empty:
@@ -68,6 +66,7 @@ def addressCheck(session, cityID): # checks until existing address is found and 
         Addressess.insert(session = session, value = adr)
         return id
     return addressess['id'][0]
+
 
 def storeCheck(id): # asks for input until store exists and returns the store id if it exists
     stores = Stores.select(column = 'id')['id']
@@ -79,7 +78,7 @@ def storeCheck(id): # asks for input until store exists and returns the store id
         print('Store doesn\'t exist in database. Please, try again.')
         id_check = input('Store ID: ')
 
-def checkGenerateIdAddressCity(session):
+def checkGenerateIdAddressCity(session): #generates new unique id, checks for the city and address (if they exist new entries are made). Returns new id and address id
     id = Base.generateId()
     city = str(input('City: '))
     state = str(input('State: '))
@@ -104,6 +103,10 @@ def addEmployee(session): # adds a new employee to the work.Employees table
     StoreEmployees.insert(session = session, value = storempl)
 
 @sess
+def editEmployee(session): #edits employee information
+    pass
+
+@sess
 def addBook(session):
     print('Adding a Book')
     id = Base.generateId()
@@ -126,7 +129,7 @@ def addBook(session):
     book = Base.toComma([id, title, authorId, genre, publicationDate, price])
     Books.insert(session = session, value = book)
 
-def findBookIdByTitle():
+def findBookIdByTitle(): # finds the existing book by title. Returns id of the title
     books = Books.select(column = 'id, title')
     bookCheck = input('Book Title: ')
     while(True):
@@ -139,8 +142,9 @@ def findBookIdByTitle():
 
 def findSupplier(): # finds supplier id by first name, last name, company name
     suppliers = Suppliers.select()
-    fnameCheck = input('Supplier First Name: ')
     check = True
+    # finds entry where first name exists
+    fnameCheck = input('Supplier First Name: ')
     while(check):
         for name in suppliers['firstName']:
             if name == fnameCheck:
@@ -148,14 +152,14 @@ def findSupplier(): # finds supplier id by first name, last name, company name
         if (check):
             print('First Name doesn\'t exist in the database. Please, try again.')
             fnameCheck = input('Supplier First Name: ')
-
+    # finds entry where first and last names exist
     lnameCheck = input('Supplier Last Name: ')
     filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck)
     while(suppliers.loc[filt].empty):
         print('Such supplier doesn\'t exist in the database. Please, try again.')
         lnameCheck = input('Supplier Last Name: ')
         filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck)
-
+    # finds entry where first, last and company names exist
     cnameCheck = input('Supplier Company Name: ')
     filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck) & (suppliers['companyName'] == cnameCheck)
     while(suppliers.loc[filt].empty):
@@ -163,19 +167,18 @@ def findSupplier(): # finds supplier id by first name, last name, company name
         cnameCheck = input('Supplier Company Name: ')
         filt = (suppliers['firstName'] == fnameCheck) & (suppliers['lastName'] == lnameCheck) & (suppliers['companyName'] == cnameCheck)
     supplierID = Suppliers.select(column = 'firstName, lastName, companyName', value = Base.toComma([fnameCheck, lnameCheck, cnameCheck]))['id'][0]
+    # returns id of an existing supplier
     return supplierID
 
-def checkWarehouse(session, id):
-    amount = Warehouse.select(column = 'id', value = id)['amount']
+def checkWarehouse(session, bookID): # checks by book id the amount of books in warehouse. Returns the amount
+    amount = Warehouse.select(column = 'id', value = bookID)['amount']
     if(amount.empty):
-        Warehouse.insert(session = session, value = f'{id}, 0')
+        Warehouse.insert(session = session, value = f'{bookID}, 0') # creates a new entry when book doesn't exist in warehouse
         return 0
-    else:
-        return int(amount[0])
+    return int(amount[0])
 
 @sess
-def supplyBook(session):
-    # when a supplier supplies books this function is called
+def supplyBook(session): # when a supplier supplies books this function is called
     print('Supplying Books')
     bookID = findBookIdByTitle()
     supplierID = findSupplier()
@@ -183,15 +186,15 @@ def supplyBook(session):
     d = date()
     insrt = Base.toComma([bookID, supplierID, booksSupplied, d])
     BookSupplier.insert(session = session, value = insrt)
-    bks = int(checkWarehouse(session, bookID)) + int(booksSupplied)
-    Warehouse.update(session = session, column = 'amount', value = bks, id = bookID)
+    bookAmount = int(checkWarehouse(session, bookID)) + int(booksSupplied)
+    Warehouse.update(session = session, column = 'amount', value = bookAmount, id = bookID)
 
-def checkBookAmount(session, id):
+def checkBookAmount(session, id): # will return the amount of books that the warehouse can supply
     books = int(checkWarehouse(session, id))
-    print(f'Currently in possession of {books} books')
-    amount =int(input(f'How many books to supply to the store? : '))
+    print(f'Warehouses are currently in possession of {books} books')
     if books == 0:
         return print('Can\'t supply any books of this title.')
+    amount =int(input(f'How many books to supply to the store? : '))
     while (True):
         if (books >= amount):
             spl = books - amount
@@ -205,25 +208,27 @@ def checkBookStore(session, bookID, storeID):
     if num.empty:
         BookStore.insert(session = session, value = f'{bookID}, {storeID}, 0')
         return 0
-    return num[0]
+    return int(num[0])
 
 @sess
-def populateBookStore(session):
-    # adds to a particular store more books and subtracts from the warehouse
+def populateBookStore(session): # adds to a particular store more books and subtracts from the warehouse
     print('Populating BookStore')
     bookID = findBookIdByTitle()
     storeID = storeCheck(input('Store ID: '))
-    bookAmount = int(checkBookAmount(session, bookID)) + int(checkBookStore(session, bookID, storeID))
+    warehouseBooks = checkBookAmount(session, bookID)
+    if warehouseBooks == None:
+        return print('Books of this title are out of stock in warehouses')
+    bookAmount = warehouseBooks + checkBookStore(session, bookID, storeID)
     BookStore.update(session = session, column = 'numberOfBooksInStore', value = f'{bookAmount}', id = f'{bookID}, {storeID}', idVALUE = 'bookId, storeId')
 
 @sess
-def addStore(session):
+def addStore(session): # adds a new store and store owner
     ownerID = ''
     Session = sessionmaker(bind=Base.engine)
     s = Session()
     try:
         print('Adding Owner')
-        id,  ad = checkGenerateIdAddressCity(s)
+        id, ad = checkGenerateIdAddressCity(s)
         ownerID = id
         info = Base.toComma([id, input('Owner First Name: '), input('Owner Last Name: '), ad, input('Owner Company Name: ')])
         Owners.insert(session = s, value = info)
@@ -238,8 +243,6 @@ def addStore(session):
     storeinfo = Base.toComma([storeID, ownerID, storeAD, input('Tax Percent: ')])
     Stores.insert(session = session, value = storeinfo)
 
-
-
 @sess
 def updateOwners(session):
     # allows to change an owner of the store
@@ -250,17 +253,16 @@ def deleteStore(session):
     # deletes the store and everything related to that particular store
     pass
 
-def checkBuyer(session):
-    # adds new buyer
-    id,  ad = checkGenerateIdAddressCity(session)
-    info = Base.toComma([id, input('First Name: '), input('Last Name: '), ad, checkCreditCard(input('Credit Card Number: '))])
+def checkBuyer(session): # adds new buyer if doesn't exist in database. Returns id of the buyer
+    buyerID,  buyerAddress = checkGenerateIdAddressCity(session)
+    info = Base.toComma([buyerID, input('First Name: '), input('Last Name: '), buyerAddress, checkCreditCard(input('Credit Card Number: '))])
     check = Buyer.select(column = 'firstName, lastName, addressId, creditCardNumber', value = Base.toComma(info[1:]))
     if not check.empty:
         return check['id'][0]
     Buyer.insert(session = session, value = info)
-    return id
+    return buyerID
 
-def checkUpdateBookAmountStore(session, bookID, storeID):
+def checkUpdateBookAmountStore(session, bookID, storeID): # returns the amount of books that the store can sell.
     info = Base.toComma([bookID, storeID])
     books = int(BookStore.select(column = 'bookId, storeId', value = info)['numberOfBooksInStore'][0])
     if books == 0:
@@ -268,18 +270,18 @@ def checkUpdateBookAmountStore(session, bookID, storeID):
         return 0
     amount = int(input('How many books to buy? : '))
     while amount > books:
-        print(f'Store doesn\'t have that many books right now current amount is {books}')
+        print(f'Store doesn\'t have that many books right now, current amount is {books}')
         amount = int(input('How many books to buy? : '))
     return amount
     BookStore.update(session = session, column = 'numberOfBooksInStore', value = (books - amount), id = info, idValue = 'bookId, storeId')
 
-def calculateTotal(bookID, amount):
+def calculateTotal(bookID, amount): # calculates total by bookID and amount of books
     bookPrice = float(Books.select(column = 'id', value = bookID)['price'][0])
     total = amount * bookPrice
     return round(total, 2)
 
 @sess
-def placeOrder(session):
+def placeOrder(session): # create a buyer if doesn't exist and let them buy books by title. Calculates the total with taxes of the store.
     print('Placing Order')
     storeID = storeCheck(input('Current Store: '))
     print('Buyer information')
@@ -307,7 +309,7 @@ def placeOrder(session):
     BuyerGenrePreferences.insert(session = session, value = info)
     updateDaySales(session, d, total)
 
-def checkCreditCard(crd):
+def checkCreditCard(crd): # checks that the credit card number is of length 16
     cardNumber = crd
     while True:
         if len(cardNumber) == 16:
@@ -315,7 +317,7 @@ def checkCreditCard(crd):
         print('Credit Card number is invalid. Please, try again')
         cardNumber = input('Credit Card Number: ')
 
-def updateDaySales(session, day, total):
+def updateDaySales(session, day, total): # adds up the profit over the day
     dSale = SalesDaily.select(column = 'dayDate', value = day)
     if dSale.empty:
         id = Base.generateId()
@@ -326,11 +328,11 @@ def updateDaySales(session, day, total):
     current = int(dSale['sales'][0])
     SalesDaily.update(session = session, column = 'sales', value = (current + int(total)), id = id)
 
-def getAuthor(id):
-    return Books.select(column = 'id', value = id)['authorId'][0]
+def getAuthor(bookID): # get and author's id by bookID
+    return Books.select(column = 'id', value = bookID)['authorId'][0]
 
-def getGenre(id):
-    return Books.select(column = 'id', value = id)['genre'][0]
+def getGenre(bookID): # get a genre of the book by bookID
+    return Books.select(column = 'id', value = bookID)['genre'][0]
 
 @sess
 def updateSales(session):
@@ -341,19 +343,17 @@ def updateSales(session):
 def addSupplier(session):
     pass
 
-
-## yes
 ########################
-addStore()
-print('Owner and Store Created')
-addEmployee()
-print('Employee Added')
-addBook()
-print('Book added')
-supplyBook()
-print('Book supplied')
-populateBookStore()
-print('Store recieved the book')
-placeOrder()
-print('Book ordered')
+#addStore()
+#print('Owner and Store Created')
+#addEmployee()
+#print('Employee Added')
+#addBook()
+#print('Book added')
+#supplyBook()
+#print('Book supplied')
+#populateBookStore()
+#print('Store recieved the book')
+#placeOrder()
+#print('Book ordered')
 ########################
