@@ -48,14 +48,6 @@ authorId nvarchar(36) not null,
 );
 go
 
-create table ord.SupplierOrder(
-orderId nvarchar(36) not null, 
-bookId nvarchar(36) not null,
-bookSupplierId nvarchar(36) not null,
-booksSold smallint not null
-);
-go
-
 CREATE TABLE store.Stores(
 id nvarchar(36) primary key,
 ownerId nvarchar(36) not null,
@@ -101,6 +93,7 @@ CREATE TABLE ord.Orders(
 id nvarchar(36) primary key,
 orderDate dateTime not null,
 employeeId nvarchar(36),
+booksSold smallint not null,
 total numeric(10,2)
 );
 GO

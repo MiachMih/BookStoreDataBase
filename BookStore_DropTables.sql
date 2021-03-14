@@ -16,7 +16,6 @@ drop table location.Cities;
 drop table ord.StoreBuyerOrder;
 drop table work.StoreEmployees;
 drop table store.Stores;
-drop table ord.SupplierOrder;
 drop table item.Suppliers
 drop table sales.SalesDaily
 drop table sales.SalesWeekly

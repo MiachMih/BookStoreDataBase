@@ -1,0 +1,41 @@
+List of function in main
+@sess{
+placeOrder(session): # create a buyer if doesn't exist and let them buy books by title. Calculates the total with taxes of the store.
+addStore(session): # adds a new store and store owner
+populateBookStore(session): # adds to a particular store more books and subtracts from the warehouse
+supplyBook(session): # when a supplier supplies books this function is called
+addBook(session) # adds a new title with author to the Books table
+addEmployee(session): # adds a new employee to the work.Employees table
+TODO: editEmployee(session): #edits employee information
+TODO: deleteEmployee(session): # deletes employee
+TODO: editBooks(session): # edits book information
+TODO: editOwners(session): # edits owners information
+TODO: deleteOwner(session): # deletes owners
+TODO: deleteStore(session): # deletes store
+TODO: editAddress(session): # edits address
+TODO: editCity(session): # edits city
+TODO: addSupplier(session): # adds a supplier
+}
+TODO: update the description of update() in Base class
+
+regular functions{
+getGenre(bookID): # get a genre of the book by bookID
+getAuthor(bookID): # get and author's id by bookID
+updateDaySales(session, day, total): # adds up the profit over the day
+checkCreditCard(crd): # checks that the credit card number is of length 16
+calculateTotal(bookID, amount): # calculates total by bookID and amount of books
+checkUpdateBookAmountStore(session, bookID, storeID): # returns the amount of books that the store can sell.
+checkBuyer(session): # adds new buyer if doesn't exist in database. Returns id of the buyer
+checkBookStore(session, bookID, storeID): # returns the amount of books in the store
+checkBookAmount(session, id): # will return the amount of books that the warehouse can supply
+checkWarehouse(session, bookID): # checks by book id the amount of books in warehouse. Returns the amount
+findSupplier(): # finds supplier id by first name, last name, company name
+findBookIdByTitle(): # finds the existing book by title. Returns id of the title
+checkGenerateIdAddressCity(session): #generates new unique id, checks for the city and address (if they exist new entries are made). Returns new id and address id
+storeCheck(id): # asks for input until store exists and returns the store id if it exists
+addressCheck(session, cityID): # checks if address exists, if not it will add a new entry. Returns id of the address (either existing or new)
+cityID(session, city, state, country): # finds if city ID exists or not, if it doesn't it creates a new entry. Returns the id of the city
+checkJob(jobC): # checks the input and stops when the existing job title exists.
+TODO make a check of values for date() function
+date(): # asks for the date year, month, day
+}

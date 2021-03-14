@@ -12,7 +12,6 @@ from buyerAuthorPreferences import BuyerAuthorPreferences
 from buyerGenrePreferences import BuyerGenrePreferences
 from orders import Orders
 from storeBuyerOrder import StoreBuyerOrder
-from supplierOrder import SupplierOrder
 from salesDaily import SalesDaily
 from salesWeekly import SalesWeekly
 from salesMonthly import SalesMonthly
@@ -27,7 +26,7 @@ from sqlalchemy.orm.session import sessionmaker
 from sess import sess
 from warehouse import Warehouse
 
-def date(): # asks for the date
+def date(): # asks for the date year, month, day
     date = ''
     date = date + input('Year: ') + '-'
     date = date + input('Month: ') + '-'
@@ -203,7 +202,7 @@ def checkBookAmount(session, id): # will return the amount of books that the war
         print('Warehouses can not supply that amount of books. Please, try again.')
         amount = int(input('How many books to supply to the store? : '))
 
-def checkBookStore(session, bookID, storeID):
+def checkBookStore(session, bookID, storeID): # returns the amount of books in the store
     num = BookStore.select(column = 'bookId, storeId', value = f'{bookID}, {storeID}')['numberOfBooksInStore']
     if num.empty:
         BookStore.insert(session = session, value = f'{bookID}, {storeID}, 0')
@@ -230,7 +229,12 @@ def addStore(session): # adds a new store and store owner
         print('Adding Owner')
         id, ad = checkGenerateIdAddressCity(s)
         ownerID = id
-        info = Base.toComma([id, input('Owner First Name: '), input('Owner Last Name: '), ad, input('Owner Company Name: ')])
+        fName = input('Owner First Name: ')
+        lName = input('Owner Last Name: ')
+        cName = input('Owner Company Name: ')
+        # TODO: redo this thing
+        checkOwner()
+        info = Base.toComma([id, fName, lName, ad, cName])
         Owners.insert(session = s, value = info)
         s.commit()
     except:
@@ -244,7 +248,7 @@ def addStore(session): # adds a new store and store owner
     Stores.insert(session = session, value = storeinfo)
 
 @sess
-def updateOwners(session):
+def editOwners(session):
     # allows to change an owner of the store
     pass
 
@@ -287,27 +291,27 @@ def placeOrder(session): # create a buyer if doesn't exist and let them buy book
     print('Buyer information')
     id = Base.generateId()
     buyerID = checkBuyer(session)
-    bookID = []
-    amount = []
     check = True
+    # TODO update books in BookStore table, so that they subtract
     bookID = findBookIdByTitle()
-    amount = int(checkUpdateBookAmountStore(session, bookID, storeID))
+    bookAmount = int(checkUpdateBookAmountStore(session, bookID, storeID))
     d = date()
     employeeID = input('Employee ID: ')
-    total = calculateTotal(bookID, amount)
+    total = calculateTotal(bookID, bookAmount)
     tax = float(Stores.select(column = 'id', value = storeID)['taxP'][0])
     total = str(total + total * (tax/100))
-    info = Base.toComma([id, d, employeeID, total])
-    storeBuyerInfo = Base.toComma([storeID, buyerID, id])
+    info = Base.toComma([id, d, employeeID, str(bookAmount), str(total)])
     Orders.insert(session = session, value = info)
+    storeBuyerInfo = Base.toComma([storeID, buyerID, id])
     StoreBuyerOrder.insert(session = session, value = storeBuyerInfo)
-    inf = Base.toComma([id, bookID, str(input('Supplier ID: ')), str(amount)])
-    SupplierOrder.insert(session = session, value = inf)
     info = Base.toComma([buyerID, getAuthor(bookID)])
     BuyerAuthorPreferences.insert(session = session, value = info)
     info = Base.toComma([buyerID, getGenre(bookID)])
     BuyerGenrePreferences.insert(session = session, value = info)
-    updateDaySales(session, d, total)
+    updateDaySales(session, d, str(total))
+    bkstr = Base.toComma([bookID, storeID])
+    newBookAmount = BookStore.select(column = 'bookId, storeId', value = bkstr)['numberOfBooksInStore'][0] + bookAmount
+    BookStore.update(session = session, column = 'numberOfBooksInStore', value = newBookAmount, id = str(bkstr), idVALUE = 'bookId, storeId')
 
 def checkCreditCard(crd): # checks that the credit card number is of length 16
     cardNumber = crd
@@ -344,16 +348,16 @@ def addSupplier(session):
     pass
 
 ########################
-#addStore()
-#print('Owner and Store Created')
-#addEmployee()
-#print('Employee Added')
-#addBook()
-#print('Book added')
-#supplyBook()
-#print('Book supplied')
-#populateBookStore()
-#print('Store recieved the book')
-#placeOrder()
-#print('Book ordered')
+# addStore()
+# print('Owner and Store Created')
+# addEmployee()
+# print('Employee Added')
+# addBook()
+# print('Book added')
+supplyBook()
+print('Book supplied')
+populateBookStore()
+print('Store recieved the book')
+placeOrder()
+print('Book ordered')
 ########################
