@@ -1,4 +1,7 @@
 List of function in main
+TODO: # @sess don't raise an error when exception is called, give a message instead. Keep the program running without crashes.
+TODO: # Base class fix the comments
+TODO: # add function names and their purpose here
 @sess{
 placeOrder(session): # create a buyer if doesn't exist and let them buy books by title. Calculates the total with taxes of the store.
 addStore(session): # adds a new store and store owner
@@ -6,19 +9,33 @@ populateBookStore(session): # adds to a particular store more books and subtract
 supplyBook(session): # when a supplier supplies books this function is called
 addBook(session) # adds a new title with author to the Books table
 addEmployee(session): # adds a new employee to the work.Employees table
-TODO: editEmployee(session): #edits employee information
+TODO: addSupplier(session): # adds a supplier
+TODO: updateSales(session):
+checkSupplierFirstName(suppliers: pd.DataFrame, firstName) -> bool: # checks if supplier exists
+checkSupplierLastName(suppliers: pd.DataFrame, firstName: str, lastName: str) -> bool: # checks if supplier exists
+checkSupplierCompanyName(suppliers: pd.DataFrame, firstName: str, lastName: str, companyName: str) -> bool: # checks if supplier exists
+findSupplierID(suppliers: pd.DataFrame, firstName: str, lastName: str, companyName: str) -> str: # finds supplier id by first name, last name, company name
+findSupplier() -> str: # accepts and checks input, returns supplier ID
+updateDaySales(session, day, total): # adds up the profit over the day
+editAuthors(session, columns, values, authorID): # edit Author information
+editEmployee(session, columns, values, employeeID): # edits employee information
+editOwners(session, columns, values, ownerID): # edits owner information
+editBooks(session, columns, values, bookID): # edits book information
+editAddress(session, columns, values, addressID): # edits address
+editCity(session, columns, values, cityID): # edits city
+editStore(session, columns, values, storeID): # edits store information
+editSupplier(session, columns, values, supplierID): # edits supplier information
+editJob(session, columns, values, jobID): # edits job information
+editOrder(session, columns, values, orderID): # edits order
+editBuyer(session, columns, values, buyerID): # edits buyer information
 TODO: deleteEmployee(session): # deletes employee
-TODO: editBooks(session): # edits book information
-TODO: editOwners(session): # edits owners information
 TODO: deleteOwner(session): # deletes owners
 TODO: deleteStore(session): # deletes store
-TODO: editAddress(session): # edits address
-TODO: editCity(session): # edits city
-TODO: addSupplier(session): # adds a supplier
 }
 TODO: update the description of update() in Base class
-
+TODO change the idVALUE to something more meaningfull, or provide a description
 regular functions{
+TODO: # redo the functions and make every function accept parameters instead of calling for input themselves
 getGenre(bookID): # get a genre of the book by bookID
 getAuthor(bookID): # get and author's id by bookID
 updateDaySales(session, day, total): # adds up the profit over the day
@@ -30,12 +47,10 @@ checkBookStore(session, bookID, storeID): # returns the amount of books in the s
 checkBookAmount(session, id): # will return the amount of books that the warehouse can supply
 checkWarehouse(session, bookID): # checks by book id the amount of books in warehouse. Returns the amount
 findSupplier(): # finds supplier id by first name, last name, company name
-findBookIdByTitle(): # finds the existing book by title. Returns id of the title
+findBookIdByTitle(bookTitle: str =None) -> str: # finds the existing book by title. Returns id of the title
 checkGenerateIdAddressCity(session): #generates new unique id, checks for the city and address (if they exist new entries are made). Returns new id and address id
 storeCheck(id): # asks for input until store exists and returns the store id if it exists
 addressCheck(session, cityID): # checks if address exists, if not it will add a new entry. Returns id of the address (either existing or new)
 cityID(session, city, state, country): # finds if city ID exists or not, if it doesn't it creates a new entry. Returns the id of the city
 checkJob(jobC): # checks the input and stops when the existing job title exists.
-TODO make a check of values for date() function
-date(): # asks for the date year, month, day
 }

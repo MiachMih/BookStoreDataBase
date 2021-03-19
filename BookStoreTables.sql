@@ -67,7 +67,7 @@ jobId nvarchar (50) not null,
 totalWorkHours int not null,
 insurance nvarchar(50) not null,
 sickTime int not null,
-performance char(1) not null 
+performance char(1) not null
 check (performance = 'A' or performance = 'B' or performance = 'C' or performance = 'D' or performance = 'F')
 );
 GO

@@ -30,18 +30,18 @@ select(column=None, value=None)
 ''')
 
     @classmethod # returns a list of column names of the table
-    def columns(cls):
+    def columns(cls) -> list:
         return pd.read_sql_query(f'''
 SELECT COLUMN_NAME as C
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.conn)['C']
 
     @classmethod # returns a comma separated string of column names of the table
-    def columnsStr(cls):
+    def columnsStr(cls) -> str:
         return cls.toComma(cls.columns())
 
     @classmethod # accepts a list and turns it into a string where each element is separated by comma
-    def toComma(cls, list):
+    def toComma(cls, list: list) -> str:
         n = len(list)
         lis = ''
         for element in list:
@@ -52,8 +52,9 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
         return lis
 
     @classmethod  # updates by a unique id singular row's column with the value
-    # TODO update the description
-    def update(cls, session, column, value, id, idVALUE = 'id'):
+    # TODO update the description, check that this actually works properly
+    # TODO change the idVALUE to something more meaningfull, or provide a description
+    def update(cls, session, column: str, value: str, id: str, idVALUE: str ='id') -> None:
         columnUpdate = ''
         for col, val in zip(column.split(', '), value.split(', ')):
             columnUpdate = columnUpdate + f' {col} = \'{val}\','
@@ -69,11 +70,11 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
     ''')
 
     @classmethod # returns a random unique id as a string with no whitespaces
-    def generateId(cls):
+    def generateId(cls) -> str:
         return  pd.read_sql_query('select convert(nvarchar(36),newid())', cls.conn).iloc[0].to_string().replace(' ', '').replace('-','')
 
     @classmethod # accepts comma separated column and value and inserts in a table that called the method
-    def insert(cls, session, column=None,value=None):
+    def insert(cls, session, column: str =None,value: str =None) -> None:
         if column == None:
             column = cls.columnsStr()
         query = ''
@@ -83,13 +84,14 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
         session.execute(f'insert into {cls.schema}.{cls.table} ({column}) values ({query})')
 
     @classmethod # deletes a row by the specified id
-    def delete(cls, session, id):
+    def delete(cls, session, id: str) -> None:
        session.execute(f'delete from {cls.schema}.{cls.table} where id = \'{id}\'')
+
     @classmethod # accepts comma separtated columns (returns all rows with information in specified columns)
                               # accepts comma separtated  column and value (returns a rows based on matching values in a columns )
                               # accepts  a value (finds an exact match of the value in any column and returns the rows)
                               #returns pandas DataFrame
-    def select(cls, column=None, value=None):
+    def select(cls, column: str =None, value: str =None) -> pd.DataFrame:
         if column != None and value !=None: # columns and values are supplied
             query  = f'select * from {cls.schema}.{cls.table} where'
             for col, val in zip(column.split(', '), value.split(', ')):
