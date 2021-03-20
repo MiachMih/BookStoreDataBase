@@ -63,7 +63,11 @@ def checkBuyer(buyerFirstName: str, buyerLastName: str, buyerCreditCard: str) ->
     return Buyer.select(column = 'firstName, lastName, creditCardNumber', value = info).empty
 
 # adder
-def addAddress(addressID: str, address: str, cityID: str, phoneNumber: str) -> None:
+def addCity(session, cityID: str, cityName: str, stateName: str, countryName: str) -> None:
+    info = Base.toComma([cityID, countryName, stateName, cityName])
+    Cities.insert(session = session, value = info)
+
+def addAddress(session, addressID: str, address: str, cityID: str, phoneNumber: str) -> None:
     addressinfo = Base.toComma([addressID, address, cityID, phoneNumber])
     Addressess.insert(session = session, value = addressinfo)
 
@@ -234,38 +238,48 @@ def placeOrder(session):
     updateDaySales(session, total)
 
 # editer
-# TODO: implement edits
-def editAuthors(session) -> None: # edit Author information
+@sess
+def editAuthors(session, columns: str, values: str, authorID: str) -> None: # edit Author information
      Authors.update(session = session, column = columns, value = values, id = authorID)
 
-def editEmployee(session) -> None: # edits employee information
+@sess
+def editEmployee(session, columns: str, values: str, employeeID: str) -> None: # edits employee information
     Employees.update(session = session, column = columns, value = values, id = employeeID)
 
-def editOwners(session) -> None: # edits owner information
+@sess
+def editOwners(session, columns: str, values: str, ownerID: str) -> None: # edits owner information
     Owners.update(session = session, column = columns, value = values, id = ownerID)
 
-def editBooks(session) -> None: # edits book information
+@sess
+def editBooks(session, columns: str, values: str, bookID: str) -> None: # edits book information
     Books.update(session = session, column = columns, value = values, id = bookID)
 
-def editCity(session) -> None: # edits city
+@sess
+def editCity(session, columns: str, values: str, cityID: str) -> None: # edits city
     Cities.update(session = session, column = columns, value = values, id = cityID)
 
-def editAddress(session) -> None: # edits address
+@sess
+def editAddress(session, columns: str, values: str, addressID: str) -> None: # edits address
     Addressess.update(session = session, column = columns, value = values, id = addressID)
 
-def editStore(session) -> None: # edits store information
+@sess
+def editStore(session, columns: str, values: str, storeID: str) -> None: # edits store information
     Stores.update(session = session, column = columns, value = values, id = storeID)
 
-def editSupplier(session) -> None: # edits supplier information
+@sess
+def editSupplier(session, columns: str, values: str, supplierID: str) -> None: # edits supplier information
     Suppliers.update(session = session, column = columns, value = values, id = supplierID)
 
-def editJob(session) -> None: # edits job information
+@sess
+def editJob(session, columns: str, values: str, jobID: str) -> None: # edits job information
     Jobs.update(session = session, column = columns, value = values, id = jobID)
 
-def editOrder(session) -> None: # edits order
+@sess
+def editOrder(session, columns: str, values: str, orderID: str) -> None: # edits order
     Orders.update(session = session, column = columns, value = values, id = orderID)
 
-def editBuyer(session) -> None: # edits buyer information
+@sess
+def editBuyer(session, columns: str, values: str, buyerID: str) -> None: # edits buyer information
     Buyer.update(session = session, column = columns, value = values, id = buyerID)
 
 # deleter
@@ -274,6 +288,128 @@ def deleteStore(session):
     # deletes the store and everything related to that particular store
     pass
 
+# display
+def display_main() -> list:
+    print('1. Add new entry')
+    print('2. Edit entry')
+    print('3. Delete entry')
+    print('4. Exit')
+    return range(1, 5)
+
+def display_Add_p1() -> list:
+    print('1. addAddress')
+    print('2. addOwnerStore')
+    print('3. addBuyer')
+    print('4. addOrder')
+    print('5. addEmployee')
+    print('6. addSupplier')
+    print('7. addBook')
+    print('8. supplyBook')
+    print('9. next page')
+    print('0. return to main menu')
+    return range(0,10)
+
+def display_Add_p2() -> list:
+    print('1. populateBookStore')
+    print('2. placeOrder')
+    print('3. previous page')
+    print('0. return to main menu')
+    return range(0,4)
+
+def display_Edit_p1() -> list:
+    print('1. editAuthors')
+    print('2. editEmployee')
+    print('3. editOwners')
+    print('4. editBooks')
+    print('5. editCity')
+    print('6. editAddress')
+    print('7. editStore')
+    print('8. editSupplier')
+    print('9. next page')
+    print('0. get back to main page')
+    return range(0, 10)
+
+def display_Edit_p2() -> list:
+    print('1. editJob')
+    print('2. editOrder')
+    print('3. editBuyer')
+    print('4. previous page')
+    print('0. get back to main page')
+    return range(0, 5)
+
+def display_Delete() -> list:
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+    print('')
+
+def getInput(options: list) -> str:
+    query = input('Your input: ').replace('.', '')
+    if query.isdigit():
+        query = int(query)
+    while not str(query).isdigit() or not (query in options):
+        print('Your input does not match any of the options.')
+        query = input('Your input: ').replace('.', '')
+        if query.isdigit():
+            query = int(query)
+    return str(query)
+
+def optionOne() -> None:
+    options = display_Add_p1()
+    query = getInput(options)
+
+def optionTwo() -> None:
+    options = display_Edit_p1()
+    query = getInput(options)
+    if query == '1':
+        editAuthors()
+    elif query == '2':
+        editEmployee()
+    elif query == '3':
+        editOwners()
+    elif query == '4':
+        editBooks()
+    elif query == '5':
+        editCity()
+    elif query == '6':
+        editAddress()
+    elif query == '7':
+        editStore()
+    elif query == '8':
+        editSupplier()
+    elif query == '9':
+        options = display_Edit_p2()
+        query = getInput(options)
+        if query == '1':
+            editJob()
+        elif query == '2':
+            editOrder()
+        elif query == '3':
+            editBuyer()
+        elif query == '4':
+            optionTwo()
+
+def optionThree() -> None:
+    options = display_Delete()
+    query = getInput(options)
+
 ########################
 # TODO implement options to choose from command line, to perform actions
+while(True):
+    options = display_main()
+    query = getInput(options)
+    if query == '1':
+        optionOne()
+    elif query == '2':
+        optionTwo()
+    elif query == '3':
+        optionThree()
+    else:
+        print('Exiting program')
+        break
 ########################
