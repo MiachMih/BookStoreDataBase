@@ -31,10 +31,10 @@ select(column=None, value=None)
 
     @classmethod # returns a list of column names of the table
     def columns(cls) -> list:
-        return pd.read_sql_query(f'''
+        return list(pd.read_sql_query(f'''
 SELECT COLUMN_NAME as C
 FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.conn)['C']
+WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.conn)['C'])
 
     @classmethod # returns a comma separated string of column names of the table
     def columnsStr(cls) -> str:
@@ -84,8 +84,12 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
         session.execute(f'insert into {cls.schema}.{cls.table} ({column}) values ({query})')
 
     @classmethod # deletes a row by the specified id
-    def delete(cls, session, id: str) -> None:
-       session.execute(f'delete from {cls.schema}.{cls.table} where id = \'{id}\'')
+    def delete(cls, session, id: str, idVALUE: str = 'id') -> None:
+        query = ''
+        for i, v in zip(id.split(', '), idVALUE.split(', ')):
+            query = query + f' {v} = \'{i}\' and'
+        query = query[:-3]
+       session.execute(f'delete from {cls.schema}.{cls.table} where{query}')
 
     @classmethod # accepts comma separtated columns (returns all rows with information in specified columns)
                               # accepts comma separtated  column and value (returns a rows based on matching values in a columns )

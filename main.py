@@ -28,11 +28,20 @@ from warehouse import Warehouse
 import datetime
 
 # checker return true if empty
+def checkOrderID(orderID) -> bool:
+    return Orders.select(column = 'id', value = orderID).empty
+
+def checkOrderList(columns, values) -> bool:
+    return Orders.select(column = columns, value = values).empty
+
 def checkStoreID(storeID: str) -> bool:
     return Stores.select(column = 'id', value = storeID).empty
 
 def checkStore(storeAddressID):
     return Stores.select(column = 'addressId', value = storeID).empty
+
+def checkStoreList(columns, values) -> bool:
+    return Stores.select(column = columns, value = values).empty
 
 def checkBookTitle(bookTitle: str) -> bool:
     return Books.select(column = 'title', value = bookTitle).empty
@@ -44,6 +53,21 @@ def checkEmployee(salary: str, addressID: str, firstName: str, lastName: str, jo
     info = Base.toComma([salary, addressID, firstName, lastName, jobID, insurance])
     return Employees.select(column = 'salary, addressId, firstName, lastName, jobId, insurance', value = info).empty
 
+def checkEmployeeList(columns: str, values: str) -> bool:
+    return Employees.select(column = columns, value = values).empty
+
+def checkOwnerID(ownerID) -> bool:
+    return Owners.select(column = 'id', value = ownerID).empty
+
+def checkOwnerList(columns, values) -> bool:
+    return Owners.select(column = columns, value = values).empty
+
+def checkBookID(bookID) -> bool:
+    return Books.select(column = 'id', value = book).empty
+
+def checkBookList(columns, values) -> bool:
+    return Books.select(column = columns, value = values).empty
+
 def checkCreditCard(creditCardNumber: str) -> bool:
     pass # TODO
 
@@ -54,12 +78,21 @@ def checkSalary(jobTitle: str, salary: int) -> bool:
 def checkJob(jobTitle: str) -> bool:
     return Jobs.select(column = 'id', value = jobTitle).empty
 
+def checkJobID(jobID) -> bool:
+    return Jobs.select(column = 'id', value = id).empty
+
+def checkJobList(columns, values) -> bool:
+    return Jobs.select(column = columns, value = values).empty
+
 def checkAddressID(addressID: str) -> bool:
     return Addressess.select(column = 'id', value = addressID).empty
 
 def checkAddress(address: str, cityID: str, phoneNumber: str) -> bool:
     info = Base.toComma([address, cityID, phoneNumber])
     return Addressess.select(column = 'address, cityId, phoneNumber', value = info).empty
+
+def checkAddressList(columns, values) -> bool:
+    return Addressess.select(column = columns, value = values)
 
 def checkSupplierFirstName(suppliers: pd.DataFrame, firstName: str) -> bool:
     filt = suppliers['firstName'] == firstName
@@ -77,9 +110,21 @@ def checkBuyer(buyerFirstName: str, buyerLastName: str, buyerCreditCard: str) ->
     info = Base.toComma([buyerFirstName, buyerLastName, buyerCreditCard])
     return Buyer.select(column = 'firstName, lastName, creditCardNumber', value = info).empty
 
+def checkBuyerID(buyerID):
+    return Buyer.select(column = 'id', value = buyerID).empty
+
+def checkBuyerList(columns, values):
+    return Buyer.select(column = columns, value = values).empty
+
+def checkAuthorID(authorID: str) -> bool:
+    return Authors.select(column = 'id', value = authorID).empty
+
 def checkAuthor(authorFirstName: str, authorLastName: str) -> bool:
     info = Base.toComma([authorFirstName, authorLastName])
     return Authors.select(column = 'authorFirstName, authorLastName', value = info).empty
+
+def checkAuthorList(columns: str, values: str) -> bool:
+    return Authors.select(column = columns, value = values).empty
 
 def checkSupplierID(supplierID: str) -> bool:
     return Suppliers.select(column = 'id', value = supplierID).empty
@@ -88,6 +133,9 @@ def checkSupplier(supplierFirstName: str, supplierLastName: str, supplierAddress
     info = Base.toComma([supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName])
     return Suppliers.select(column = 'firstName, lastName, addressId, companyName', value = info).empty
 
+def checkSupplierList(columns, values) -> bool:
+    return Suppliers.select(column = columns, value = values).empty
+
 def checkCityID(cityID: str) -> bool:
     return Cities.select(column = 'id', value = cityID).empty
 
@@ -95,6 +143,8 @@ def checkCity(country: str, state: str, city: str) -> bool:
     info = Base.toComma([country, state, city])
     return Cities.select(column = 'countryName, stateName, cityName', value = info).empty
 
+def checkCityList(columns, values) -> bool:
+    return Cities.select(column = columns, value = values).empty
 # specialChecker
 def specialCheckAddress(session, address: str, cityID: str, phoneNumber: str) -> str:
     if checkAddress(address, cityID, phoneNumber):
@@ -110,6 +160,18 @@ def specialCheckCity(session, country: str, state: str, city: str) -> str:
         return cityID
     cityID = getCItyID(country, state, city)
     return cityID
+
+def specialEditor(columns: list, listOfColumns: list) -> [list, list]:
+    values = []
+    tempColumns = columns.copy()
+    for column in columns:
+        if column in listOfColumns:
+            values.append(input(f'Add {column}: '))
+        else:
+            print(f'{column} is not in the list of editable columns, removing it from your list of edits')
+            tempColumns.remove(column)
+    return tempColumns, values
+
 # adder
 def addCity(session, cityID: str, cityName: str, stateName: str, countryName: str) -> None:
     info = Base.toComma([cityID, countryName, stateName, cityName])
@@ -316,16 +378,16 @@ def placeOrder(session):
     updateDaySales(session, total)
 
 # editer
-def editAuthors(session, columns: str, values: str, authorID: str) -> None: # edit Author information
+def editAuthor(session, columns: str, values: str, authorID: str) -> None: # edit Author information
      Authors.update(session = session, column = columns, value = values, id = authorID)
 
 def editEmployee(session, columns: str, values: str, employeeID: str) -> None: # edits employee information
     Employees.update(session = session, column = columns, value = values, id = employeeID)
 
-def editOwners(session, columns: str, values: str, ownerID: str) -> None: # edits owner information
+def editOwner(session, columns: str, values: str, ownerID: str) -> None: # edits owner information
     Owners.update(session = session, column = columns, value = values, id = ownerID)
 
-def editBooks(session, columns: str, values: str, bookID: str) -> None: # edits book information
+def editBook(session, columns: str, values: str, bookID: str) -> None: # edits book information
     Books.update(session = session, column = columns, value = values, id = bookID)
 
 def editCity(session, columns: str, values: str, cityID: str) -> None: # edits city
@@ -396,9 +458,9 @@ def display_Edit_p2() -> list:
     return range(0, 5)
 
 def display_Delete() -> list:
-    print('')
-    print('')
-    print('')
+    print('1. Delete Employee')
+    print('2. Delete Store & Owner')
+    print('3. Delete ')
     print('')
     print('')
     print('')
@@ -535,42 +597,279 @@ def optionOne(session) -> None: # Add new entry
         addSupplier(session, supplierID, supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName)
 
 @sess
-def optionTwo(session) -> None:  # edit entry
+def optionTwo(session) -> None:  # edit entry, you have to know the id of the table to edit
     options = display_Edit_p1()
     query = getInput(options)
-    if query == '1':
-        editAuthors()
-    elif query == '2':
-        editEmployee()
-    elif query == '3':
-        editOwners()
-    elif query == '4':
-        editBooks()
-    elif query == '5':
-        editCity()
-    elif query == '6':
-        editAddress()
-    elif query == '7':
-        editStore()
-    elif query == '8':
-        editSupplier()
-    elif query == '9':
+    if query == '1': # edit AUthors
+        authorID = input('Author ID: ')
+        while checkAuthorID(authorID):
+            print('Author ID doesn\'t exist in database.')
+            authorID = input('Author ID: ')
+        print(f'List of columns to edit ({Authors.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Authors.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkAuthorList(columns, values):
+            editAuthor(session, columns, values, authorID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such author already exists')
+        return optionTwo()
+    elif query == '2': # edit Employee
+            employeeID = input('Employee ID: ')
+            while checkEmployeeID(employeeID):
+                print('Employee ID doesn\'t exist in database.')
+                authorID = input('Employee ID: ')
+            print(f'List of columns to edit ({Employees.columnsStr()[4:]})')
+            columns = input('Write columns to edit, separating by comma: ')
+            columns = columns.replace(' ', '')
+            columns = list(set(columns.split(',')))
+            if('id' in columns):
+                print('id can not be edited, removing from the list of columns to edit')
+                columns.remove('id')
+            listOfColumns = Employees.columns()[1:]
+            columns, values = specialEditor(columns, listOfColumns)
+            columns = Base.toComma(columns)
+            values = Base.toComma(values)
+            if checkEmployeeList(columns, values):
+                editEmployee(session, columns, values, employeeID)
+                print('Successful edit')
+                return optionTwo()
+            print('Such employee already exists')
+            return optionTwo()
+    elif query == '3': # edit Owner
+        ownerID = input('Owner ID: ')
+        while checkOwnerID(ownerID):
+            print('Owner ID doesn\'t exist in database.')
+            ownerID = input('Owner ID: ')
+        print(f'List of columns to edit ({Owners.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Owners.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkOwnerList(columns, values):
+            editOwner(session, columns, values, ownerID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such owner already exists')
+        return optionTwo()
+    elif query == '4': # edit Book
+        bookID = input('Book ID: ')
+        while checkBookID(bookID):
+            print('Book ID doesn\'t exist in database.')
+            bookID = input('Book ID: ')
+        print(f'List of columns to edit ({Books.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Books.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkBookList(columns, values):
+            editBook(session, columns, values, bookID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such book already exists')
+        return optionTwo()
+    elif query == '5': # edit City
+        cityID = input('City ID: ')
+        while checkCityID(cityID):
+            print('City ID doesn\'t exist in database.')
+            authorID = input('City ID: ')
+        print(f'List of columns to edit ({Cities.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Cities.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkCityList(columns, values):
+            editCity(session, columns, values, cityID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such city already exists')
+        return optionTwo()
+    elif query == '6': # edit Address
+        addressID = input('Address ID: ')
+        while checkAddressID(addressID):
+            print('Address ID doesn\'t exist in database.')
+            addressID = input('Address ID: ')
+        print(f'List of columns to edit ({Addressess.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Addressess.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkAddressList(columns, values):
+            editAddress(session, columns, values, addressID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such address already exists')
+        return optionTwo()
+    elif query == '7': # edit Store
+        storeID = input('Store ID: ')
+        while checkStoreID(storeID):
+            print('Store ID doesn\'t exist in database.')
+            storeID = input('Store ID: ')
+        print(f'List of columns to edit ({Stores.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Stores.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkStoreList(columns, values):
+            editStore(session, columns, values, storeID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such store already exists')
+        return optionTwo()
+    elif query == '8': # edit Supplier
+        supplierID = input('Supplier ID: ')
+        while checkSupplierID(supplierID):
+            print('Supplier ID doesn\'t exist in database.')
+            supplierID = input('Supplier ID: ')
+        print(f'List of columns to edit ({Suppliers.columnsStr()[4:]})')
+        columns = input('Write columns to edit, separating by comma: ')
+        columns = columns.replace(' ', '')
+        columns = list(set(columns.split(',')))
+        if('id' in columns):
+            print('id can not be edited, removing from the list of columns to edit')
+            columns.remove('id')
+        listOfColumns = Suppliers.columns()[1:]
+        columns, values = specialEditor(columns, listOfColumns)
+        columns = Base.toComma(columns)
+        values = Base.toComma(values)
+        if checkSupplierList(columns, values):
+            editSupplier(session, columns, values, supplierID)
+            print('Successful edit')
+            return optionTwo()
+        print('Such supplier already exists')
+        return optionTwo()
+    elif query == '9': # next page
         options = display_Edit_p2()
         query = getInput(options)
-        if query == '1':
-            editJob()
-        elif query == '2':
-            editOrder()
-        elif query == '3':
-            editBuyer()
-        elif query == '4':
+        if query == '1': # edit Job
+            jobID = input('Job ID: ')
+            while checkJobID(jobID):
+                print('Job ID doesn\'t exist in database.')
+                jobID = input('Job ID: ')
+            print(f'List of columns to edit ({Jobs.columnsStr()[4:]})')
+            columns = input('Write columns to edit, separating by comma: ')
+            columns = columns.replace(' ', '')
+            columns = list(set(columns.split(',')))
+            if('id' in columns):
+                print('id can not be edited, removing from the list of columns to edit')
+                columns.remove('id')
+            listOfColumns = Jobs.columns()[1:]
+            columns, values = specialEditor(columns, listOfColumns)
+            columns = Base.toComma(columns)
+            values = Base.toComma(values)
+            if checkJobList(columns, values):
+                editJob(session, columns, values, jobID)
+                print('Successful edit')
+                return optionTwo()
+            print('Such job already exists')
+            return optionTwo()
+        elif query == '2': # edit Order
+            orderID = input('Order ID: ')
+            while checkOrderID(orderID):
+                print('Order ID doesn\'t exist in database.')
+                orderID = input('Order ID: ')
+            print(f'List of columns to edit ({Orders.columnsStr()[4:]})')
+            columns = input('Write columns to edit, separating by comma: ')
+            columns = columns.replace(' ', '')
+            columns = list(set(columns.split(',')))
+            if('id' in columns):
+                print('id can not be edited, removing from the list of columns to edit')
+                columns.remove('id')
+            listOfColumns = Orders.columns()[1:]
+            columns, values = specialEditor(columns, listOfColumns)
+            columns = Base.toComma(columns)
+            values = Base.toComma(values)
+            if checkOrderList(columns, values):
+                editOrder(session, columns, values, orderID)
+                print('Successful edit')
+                return optionTwo()
+            print('Such order already exists')
+            return optionTwo()
+        elif query == '3': # edit Buyer
+            buyerID = input('Buyer ID: ')
+            while checkBuyerID(buyerID):
+                print('Buyer ID doesn\'t exist in database.')
+                buyerID = input('Buyer ID: ')
+            print(f'List of columns to edit ({Buyer.columnsStr()[4:]})')
+            columns = input('Write columns to edit, separating by comma: ')
+            columns = columns.replace(' ', '')
+            columns = list(set(columns.split(',')))
+            if('id' in columns):
+                print('id can not be edited, removing from the list of columns to edit')
+                columns.remove('id')
+            listOfColumns = Buyer.columns()[1:]
+            columns, values = specialEditor(columns, listOfColumns)
+            columns = Base.toComma(columns)
+            values = Base.toComma(values)
+            if checkBuyerList(columns, values):
+                editBuyer(session, columns, values, buyerID)
+                print('Successful edit')
+                return optionTwo()
+            print('Such buyer already exists')
+            return optionTwo()
+        elif query == '4': # previous page
             optionTwo()
 
 @sess
 def optionThree(session) -> None: # delete entry
     options = display_Delete()
     query = getInput(options)
-
+    if query == '1':
+        pass
+    elif query == '2':
+        pass
+    elif query == '3':
+        pass
+    elif query == '4':
+        pass
+    elif query == '5':
+        pass
+    elif query == '6':
+        pass
+    elif query == '7':
+        pass
+    elif query == '8':
+        pass
+    elif query == '9':
+        pass
 ########################
 # TODO implement options to choose from command line, to perform actions
 while(True):
@@ -581,7 +880,8 @@ while(True):
     elif query == '2': # edit entry
         optionTwo()
     elif query == '3': # delete entry
-        optionThree()
+        print('We are under construction right now, please check in later.')
+        # optionThree()
     else:
         print('Exiting program')
         break
