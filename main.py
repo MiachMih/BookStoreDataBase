@@ -27,24 +27,39 @@ from sess import sess
 from warehouse import Warehouse
 import datetime
 
-# checker
+# checker return true if empty
+def checkStoreID(storeID: str) -> bool:
+    return Stores.select(column = 'id', value = storeID).empty
+
+def checkStore(storeAddressID):
+    return Stores.select(column = 'addressId', value = storeID).empty
+
 def checkBookTitle(bookTitle: str) -> bool:
     return Books.select(column = 'title', value = bookTitle).empty
 
 def checkEmployeeID(employeeID: str) -> bool:
     return Employees.select(column = 'id', value = emplyoeeID).empty
 
+def checkEmployee(salary: str, addressID: str, firstName: str, lastName: str, jobID: str, insurance: str) -> bool:
+    info = Base.toComma([salary, addressID, firstName, lastName, jobID, insurance])
+    return Employees.select(column = 'salary, addressId, firstName, lastName, jobId, insurance', value = info).empty
+
 def checkCreditCard(creditCardNumber: str) -> bool:
     pass # TODO
+
+def checkSalary(jobTitle: str, salary: int) -> bool:
+    job = Jobs.select(column = 'id', value = jobTitle)
+    return not(job['minSalary'][0] <= salary and job['maxSalary'][0] >= salary)
 
 def checkJob(jobTitle: str) -> bool:
     return Jobs.select(column = 'id', value = jobTitle).empty
 
-def checkAddress(addressID: str) -> bool:
+def checkAddressID(addressID: str) -> bool:
     return Addressess.select(column = 'id', value = addressID).empty
 
-def checkStore(storeID: str) -> bool:
-    return Stores.select(column = 'id', value = storeID).empty
+def checkAddress(address: str, cityID: str, phoneNumber: str) -> bool:
+    info = Base.toComma([address, cityID, phoneNumber])
+    return Addressess.select(column = 'address, cityId, phoneNumber', value = info).empty
 
 def checkSupplierFirstName(suppliers: pd.DataFrame, firstName: str) -> bool:
     filt = suppliers['firstName'] == firstName
@@ -62,6 +77,39 @@ def checkBuyer(buyerFirstName: str, buyerLastName: str, buyerCreditCard: str) ->
     info = Base.toComma([buyerFirstName, buyerLastName, buyerCreditCard])
     return Buyer.select(column = 'firstName, lastName, creditCardNumber', value = info).empty
 
+def checkAuthor(authorFirstName: str, authorLastName: str) -> bool:
+    info = Base.toComma([authorFirstName, authorLastName])
+    return Authors.select(column = 'authorFirstName, authorLastName', value = info).empty
+
+def checkSupplierID(supplierID: str) -> bool:
+    return Suppliers.select(column = 'id', value = supplierID).empty
+
+def checkSupplier(supplierFirstName: str, supplierLastName: str, supplierAddressID: str, supplierCompanyName: str) -> bool:
+    info = Base.toComma([supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName])
+    return Suppliers.select(column = 'firstName, lastName, addressId, companyName', value = info).empty
+
+def checkCityID(cityID: str) -> bool:
+    return Cities.select(column = 'id', value = cityID).empty
+
+def checkCity(country: str, state: str, city: str) -> bool:
+    info = Base.toComma([country, state, city])
+    return Cities.select(column = 'countryName, stateName, cityName', value = info).empty
+
+# specialChecker
+def specialCheckAddress(session, address: str, cityID: str, phoneNumber: str) -> str:
+    if checkAddress(address, cityID, phoneNumber):
+        addressID = Base.generateId()
+        return addressID
+    addressID = getAddressID(address, cityID, phoneNumber)
+    return addressID
+
+def specialCheckCity(session, country: str, state: str, city: str) -> str:
+    if checkCity(country, state, city):
+        cityID = Base.generaeId()
+        addCity(session, cityID, city, state, country)
+        return cityID
+    cityID = getCItyID(country, state, city)
+    return cityID
 # adder
 def addCity(session, cityID: str, cityName: str, stateName: str, countryName: str) -> None:
     info = Base.toComma([cityID, countryName, stateName, cityName])
@@ -92,15 +140,29 @@ def addEmployee(session, storeID: str, employeeID: str, employeeAddressID: str, 
     Employees.insert(session = session, value = employeeInformation)
     StoreEmployees.insert(session = session, value = storeEmployee)
 
-def addSupplier(session, supplierID: str, supplierFirstName: str, supplierLastName: str, supplierAddress: str, supplierCompanyName: str) -> None:
-    info = Base.toComma([supplierID, supplierFirstName, supplierLastName, supplierAddress, supplierCompanyName])
+def addSupplier(session, supplierID: str, supplierFirstName: str, supplierLastName: str, supplierAddressID: str, supplierCompanyName: str) -> None:
+    info = Base.toComma([supplierID, supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName])
     Suppliers.insert(session = session, value = info)
 
 def addBook(session, bookID: str, bookTitle: str, authorId: str, genre: str, publicationDate: str, price: str) -> None:
     book = Base.toComma([bookID, bookTitle, authorId, genre, publicationDate, price])
     Books.insert(session = session, value = book)
 
+def addAuthor(session, authorID: str, authorFirstName: str, authorLastName: str) -> None:
+    info = Base.toComma([authorID, authorFirstName, authorLastName])
+    Authors.insert(session = session, value = info)
+
 # getter
+def getAddressID(address: str, cityID: str, phoneNumber: str) -> str:
+    info = Base.toComma([address, cityID, phoneNumber])
+    return Addressess.select(column = 'address, cityId, phoneNumber', value = info)
+
+def getMinSalary(jobTitle: str) -> str:
+    return Jobs.select(column = 'id', value = jobTitle)['minSalary'][0]
+
+def getMaxSalary(jobTitle: str) -> str:
+    return Jobs.select(column = 'id', value = jobTitle)['maxSalary'][0]
+
 def getBookIdByTitle(bookTitle: str) -> str:
     books = Books.select(column = 'id, title').set_index('id')
     filt = books['title'] == bookTitle
@@ -133,8 +195,12 @@ def getBuyerID(buyerFirstName: str, buyerLastName: str, buyerCreditCard: str) ->
     info = Base.toComma([buyerFirstName, buyerLastName, buyerCreditCard])
     return Buyer.select(column = 'firstName, lastName, creditCardNumber', value = info)['id'][0]
 
-def getAuthor(bookID: str) -> str: # get and author's id by bookID
+def getAuthorIDbyBookID(bookID: str) -> str: # get and author's id by bookID
     return Books.select(column = 'id', value = bookID)['authorId'][0]
+
+def getAuthorID(authorFirstName: str, authorLastName: str) -> str:
+    info = Base.toComma([authorFirstName, authorLastName])
+    return Authors.select(column = 'authorFirstName, authorLastName', value = info)['id'][0]
 
 def getGenre(bookID: str) -> str: # get a genre of the book by bookID
     return Books.select(column = 'id', value = bookID)['genre'][0]
@@ -142,11 +208,14 @@ def getGenre(bookID: str) -> str: # get a genre of the book by bookID
 def getTax(storeID: str) -> int:
     return Stores.select(column = 'id', value = storeID)['taxP'][0]
 
+def getCityID(country: str, state: str, city: str) -> str:
+    info = Base.toComma([country, state, city])
+    return Cities.select(column = 'countryName, stateName, cityName', value = info)['id'][0]
+
 # updater
 def updateBookStore(session, bookID: str, storeID: str, amountOfBooksBought: int) -> None:
     bookStore = Base.toComma([bookID, storeID])
-    numberOfBooksInStore = BookStore.select(column = 'bookId, storeId',
-                                            value = bookStore)['numberOfBooksInStore'][0]
+    numberOfBooksInStore = BookStore.select(column = 'bookId, storeId', value = bookStore)['numberOfBooksInStore'][0]
     info = str(numberOfBooksInStore - amountOfBooksBought)
     BookStore.update(session = session, column = 'numberOfBooksInStore',
                         value = info, id = bookStore, idVALUE = 'bookId, storeId')
@@ -199,8 +268,17 @@ def populateBookStore(session, bookID: str, storeID: str, warehouseBooks: int) -
     bookAmount = warehouseBooks + getNumberOfBooksInStore(session, bookID, storeID)
     BookStore.update(session = session, column = 'numberOfBooksInStore', value = f'{bookAmount}',
                         id = f'{bookID}, {storeID}', idVALUE = 'bookId, storeId')
+    warehouseCurrentAmount = int(Warehouse.select(column = 'id', value = bookID)['amount'][0])
+    Warehouse.update(session = session, column = 'amount', value = str(warehouseCurrentAmount - warehouseBooks))
 
-@sess
+def newBook(session, bookID: str, bookTitle: str, genre: str, publicationDate: str, price: str, authorFirstName: str, authorLastName: str) -> None:
+    if checkAuthor(authorFirstName, authorLastName):
+        authorID = Base.generateId()
+        addAuthor(session, authorID, authorFirstName, authorLastName)
+    else:
+        authorID = getAuthorID(authorFirstName, authorLastName)
+    addBook(bookID, bookTitle, authorID, genre, publciationDate, price)
+
 def placeOrder(session):
     print('Placing Order')
     storeID = input('Current Store: ')
@@ -223,7 +301,7 @@ def placeOrder(session):
     bookTitle = input('Book Title to buy: ')
     while(checkBookTitle(bookTitle)):
         bookTitle = input('Book Title to buy: ')
-    bookID = findBookIdByTitle(bookTitle)
+    bookID = getBookIdByTitle(bookTitle)
     employeeID = input('Employee ID: ')
     while(checkEmployeeID(employeeID)):
         employeeID = input('Employee ID: ')
@@ -234,56 +312,44 @@ def placeOrder(session):
     tax = getTax(storeID)
     total = calculateTotal(bookID, amountOfBooksToBuy, tax)
     addOrder(session, orderID, employeeID, amountOfBooksToBuy, total)
-    updateBookStore(bookID, storeID, amountOfBooksToBuy)
+    updateBookStore(session, bookID, storeID, amountOfBooksToBuy)
     updateDaySales(session, total)
 
 # editer
-@sess
 def editAuthors(session, columns: str, values: str, authorID: str) -> None: # edit Author information
      Authors.update(session = session, column = columns, value = values, id = authorID)
 
-@sess
 def editEmployee(session, columns: str, values: str, employeeID: str) -> None: # edits employee information
     Employees.update(session = session, column = columns, value = values, id = employeeID)
 
-@sess
 def editOwners(session, columns: str, values: str, ownerID: str) -> None: # edits owner information
     Owners.update(session = session, column = columns, value = values, id = ownerID)
 
-@sess
 def editBooks(session, columns: str, values: str, bookID: str) -> None: # edits book information
     Books.update(session = session, column = columns, value = values, id = bookID)
 
-@sess
 def editCity(session, columns: str, values: str, cityID: str) -> None: # edits city
     Cities.update(session = session, column = columns, value = values, id = cityID)
 
-@sess
 def editAddress(session, columns: str, values: str, addressID: str) -> None: # edits address
     Addressess.update(session = session, column = columns, value = values, id = addressID)
 
-@sess
 def editStore(session, columns: str, values: str, storeID: str) -> None: # edits store information
     Stores.update(session = session, column = columns, value = values, id = storeID)
 
-@sess
 def editSupplier(session, columns: str, values: str, supplierID: str) -> None: # edits supplier information
     Suppliers.update(session = session, column = columns, value = values, id = supplierID)
 
-@sess
 def editJob(session, columns: str, values: str, jobID: str) -> None: # edits job information
     Jobs.update(session = session, column = columns, value = values, id = jobID)
 
-@sess
 def editOrder(session, columns: str, values: str, orderID: str) -> None: # edits order
     Orders.update(session = session, column = columns, value = values, id = orderID)
 
-@sess
 def editBuyer(session, columns: str, values: str, buyerID: str) -> None: # edits buyer information
     Buyer.update(session = session, column = columns, value = values, id = buyerID)
 
 # deleter
-@sess
 def deleteStore(session):
     # deletes the store and everything related to that particular store
     pass
@@ -296,25 +362,17 @@ def display_main() -> list:
     print('4. Exit')
     return range(1, 5)
 
+# TODO: redo this mess so that only things that are supposed to be addable are here
 def display_Add_p1() -> list:
-    print('1. addAddress')
-    print('2. addOwnerStore')
-    print('3. addBuyer')
-    print('4. addOrder')
-    print('5. addEmployee')
-    print('6. addSupplier')
-    print('7. addBook')
-    print('8. supplyBook')
-    print('9. next page')
+    print('1. Place Order')
+    print('2. Populate Store with books')
+    print('3. Supply books to warehouses')
+    print('4. Add new book to sell')
+    print('5. Add new employee to the store')
+    print('6. Add new store and store owner')
+    print('7. Add new supplier')
     print('0. return to main menu')
-    return range(0,10)
-
-def display_Add_p2() -> list:
-    print('1. populateBookStore')
-    print('2. placeOrder')
-    print('3. previous page')
-    print('0. return to main menu')
-    return range(0,4)
+    return range(0,8)
 
 def display_Edit_p1() -> list:
     print('1. editAuthors')
@@ -359,11 +417,125 @@ def getInput(options: list) -> str:
             query = int(query)
     return str(query)
 
-def optionOne() -> None:
+@sess
+def optionOne(session) -> None: # Add new entry
     options = display_Add_p1()
     query = getInput(options)
+    if query == '1': # 1. Place Order
+        placeOrder()
+    elif query == '2': # 2. Populate Store with books from Warehouse
+        bookTitle = input('Book Title: ')
+        while(checkBookTitle(bookTitle)):
+            print('Title isn\'t in the database')
+            bookTitle = input('Book Title: ')
+        bookID = getBookIdByTitle(bookTitle)
+        warehouseBooks = input('Amount of books to supply: ')
+        currentWarehouseAmount = getWarehouseBooks(session, bookID)
+        if currentWarehouseAmount == 0:
+            print(f'Warehouse currently out of stock of book {bookTitle}')
+            return optionOne()
+        while(currentWarehouseAmount < warehouseBooks):
+            print(f'Warehouse currently in posession of {currentWarehouseAmount} books')
+            print('Can not supply more than that')
+            warehouseBooks = input('Amount of books to supply: ')
+        storeID = input('Store ID: ')
+        while(checkStoreID(storeID)):
+            print('Store isn\'t in the database')
+            storeID = input('Store ID: ')
+        populateBookStore(session, bookID, storeID, warehouseBooks)
+    elif query == '3': # 3. Supply books to warehouses
+        bookTitle = input('Book Title: ')
+        while(checkBookTitle(bookTitle)):
+            print('Title isn\'t in the database')
+            bookTitle = input('Book Title: ')
+        bookID = getBookIdByTitle(bookTitle)
+        supplierID = findSupplier()
+        supplyBook(session, bookID, supplierID, booksSupplied)
+    elif query == '4': # 4. Add new book to sell
+        bookID = Base.generateId()
+        bookTitle = input('Book Title: ')
+        while(not checkBookTitle(bookTitle)):
+            print('Book title already exists')
+            bookTitle = input('Book Title: ')
+        genre = input('Genre: ')
+        year = input('Year: ')
+        month = input('Month: ')
+        day = input('Day: ')
+        price = input('Price')
+        authorFirstName = input('First Name: ')
+        authorLastName = input('Last Name: ')
+        newBook(session, bookID, bookTitle, genre, publicationDate, price, authorFirstName, authorLastName)
+    elif query == '5': # 5. Add new employee to the store
+        employeeFirstName = input('Employee first name: ')
+        employeeLastName = input('Employee last name: ')
+        jobTitle = input('Job Title: ')
+        while(checkJob(jobTitle)):
+            print('Job title doesn\'t exist')
+            jobTitle = input('Job Title: ')
+        employeeSalary = input('Employee Salary: ')
+        while(checkSalary(jobTitle, employeeSalary)):
+            print(f'Salary for the job must be between {getMinSalary(jobTitle)} and {getMaxSalary(jobTitle)}')
+            employeeSalary = input('Employee Salary: ')
+        storeID = input('Store ID: ')
+        while(checkStoreID(storeID)):
+            print('Store ID doesn\'t exist in the database')
+            storeID = input('Store ID: ')
+        employeeCountry = input('Employee Country: ')
+        employeeState = input('Employee State: ')
+        employeeCity = input('Employee City: ')
+        employeeCityID = specialCheckCity(session, employeeCountry, employeeState, employeeCity)
+        employeePhoneNumber = input('Employee Phone number: ')
+        employeeAddress = input('Employee Address: ')
+        employeeAddressID = specialCheckAddress(session, employeeAddress, employeeCityID, employeePhoneNumber)
+        employeeInsurance = input('Employee Insurance: ')
+        if checkEmployee(salary, employeeAddressID, employeeFirstName, employeeLastName, jobTitle, employeeInsurance):
+            employeeID = Base.generaeId()
+        else:
+            print('Employee already exists in the database')
+            return optionOne()
+        date = datetime.date.today().strftime('%Y-%m-%d')
+        addEmployee(session, storeID, employeeID, employeeAddressID, date, jobTitle, employeeFirstName, employeeLastName, employeeSalary, employeeInsurance)
+    elif query == '6': # 6. Add new store and store owner
+        storeCountry = input('Store Country: ')
+        storeState = input('Store State: ')
+        storeCity = input('Store City: ')
+        storeCityID = specialCheckCity(session, storeCountry, storeState, storeCity)
+        storePhoneNumber = input('Store Number: ')
+        storeAddress = input('Store Address: ')
+        storeAddressID = specialCheckAddress(session, storeAddress, storeCityID, storePhoneNumber)
+        if not checkStore(storeAddressID):
+            print('Store already exists')
+            return optionOne()
+        storeID = Base.generateId()
+        taxP = input('Tax percent: ')
+        ownerCountry = input('Owner Country: ')
+        ownerState = input('Owner State: ')
+        ownerCity = input('Owner City: ')
+        ownerCityID = specialCheckCity(session, ownerCountry, ownerState, ownerCity)
+        ownerPhoneNumber = input('Phone Number: ')
+        ownerAddress = input('Owner Address: ')
+        employeeAddressID = specialCheckAddress(session, ownerAddress, ownerCityID, ownerPhoneNumber)
+        date = datetime.date.today().strftime('%Y-%m-%d')
+        addOwnerStore(session, ownerID, ownerFirstName, ownerLastName, ownerAddressID, ownerCompanyName, storeID, storeAddressID, taxP)
+    elif query == '7': # 7. Add new supplier
+        supplierFirstName = input('Supplier First Name: ')
+        supplierLastName = input('Supplier Last Name: ')
+        supplierCountry = input('Supplier Country: ')
+        supplierState = input('Supplier State: ')
+        supplierCity = input('Supplier City: ')
+        supplierCityID = specialCheckCity(session, supplierCountry, supplierState, supplierCity)
+        supplierPhoneNumber = input('Supplier Phone Number: ')
+        supplierAddress = input('Supplier Address: ')
+        supplierAddressID = specialCheckAddress(session, supplierAddress, supplierCityID, supplierPhoneNumber)
+        supplierCompanyName = input('Supplier Company Name: ')
+        if not checkSupplier(supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName):
+            print('Supplier already exists in database')
+            return optionOne()
+        supplierID = Base.generateId()
+        addSupplier(session, supplierID, supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName)
 
-def optionTwo() -> None:
+@sess
+def optionTwo(session) -> None:  # edit entry
     options = display_Edit_p1()
     query = getInput(options)
     if query == '1':
@@ -394,7 +566,8 @@ def optionTwo() -> None:
         elif query == '4':
             optionTwo()
 
-def optionThree() -> None:
+@sess
+def optionThree(session) -> None: # delete entry
     options = display_Delete()
     query = getInput(options)
 
@@ -403,11 +576,11 @@ def optionThree() -> None:
 while(True):
     options = display_main()
     query = getInput(options)
-    if query == '1':
+    if query == '1': # Add new entry
         optionOne()
-    elif query == '2':
+    elif query == '2': # edit entry
         optionTwo()
-    elif query == '3':
+    elif query == '3': # delete entry
         optionThree()
     else:
         print('Exiting program')
