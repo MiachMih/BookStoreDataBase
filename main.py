@@ -26,6 +26,7 @@ from sqlalchemy.orm.session import sessionmaker
 from sess import sess
 from warehouse import Warehouse
 import datetime
+from datetime import datetime as dt
 
 # checker return true if empty
 def checkOrderID(session, orderID) -> bool:
@@ -161,6 +162,8 @@ def specialCheckNumberInputVaried(inpt: str, allowedMinLength: int, allowedMaxLe
     for num in inpt.strip():
         if num.isnumeric():
             fixedInput += num
+    if fixedInput == '':
+        return print(f'Allowed length is between {allowedMinLength} and {allowedMaxLength}')
     fixedInput = str(int(fixedInput))
     if len(fixedInput) < allowedMinLength or len(fixedInput) > allowedMaxLength:
         return print(f'Allowed length is between {allowedMinLength} and {allowedMaxLength}')
@@ -254,7 +257,7 @@ def addBuyer(session, buyerID: str, buyerFirstName: str, buyerLastName: str, buy
     Buyer.insert(session = session, value = Base.toComma(info))
 
 def addOrder(session, orderID: str, employeeID: str, booksSold: str, total: str) -> None:
-    orderDate = datetime.date.now().strftime("%Y-%m-%d %H:%M:%S")
+    orderDate = dt.now().strftime("%Y-%m-%d %H:%M:%S")
     info = Base.toComma([orderID, orderDate, employeeID, booksSold, total])
     Orders.insert(session = session, value = info)
 
@@ -371,12 +374,15 @@ def findSupplier(session) -> str:
     suppliers = Suppliers.select(session = session)
     firstName = input('Supplier First name: ')
     while(checkSupplierFirstName(session, suppliers, firstName)):
+        print('No such supplier')
         firstName = input('Supplier First name: ')
     lastName = input('Supplier Last name: ')
     while(checkSupplierLastName(session, suppliers, firstName, lastName)):
+        print('No such supplier')
         lastName = input('Supplier Last name: ')
     companyName = input('Supplier Company name: ')
     while (checkSupplierCompanyName(session, suppliers, firstName, lastName, companyName)):
+        print('No such supplier')
         companyName = input('Supplier Company name: ')
     suppliers = suppliers.set_index('id')
     return getSupplierID(session, suppliers, firstName, lastName, companyName)
@@ -681,26 +687,26 @@ def optionOne(session) -> None: # Add new entry
             print('Job title doesn\'t exist')
             jobTitle = input('Job Title: ').strip()
         print(f'Salary for the job must be between {getMinSalary(session, jobTitle)} and {getMaxSalary(session, jobTitle)}')
-        employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+        employeeSalary = specialCheckNumberInputVaried(input('Employee Salary: '), 1, 6)
         while employeeSalary == None:
-            employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+            employeeSalary = specialCheckNumberInputVaried(input('Employee Salary: '), 1, 6)
         while(checkSalary(session, jobTitle, int(employeeSalary))):
             print(f'Salary for the job must be between {getMinSalary(session, jobTitle)} and {getMaxSalary(session, jobTitle)}')
-            employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+            employeeSalary = specialCheckNumberInputVaried(input('Employee Salary: '), 1, 6)
             while employeeSalary == None:
-                employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+                employeeSalary = specialCheckNumberInputVaried(input('Employee Salary: '), 1, 6)
         storeID = input('Store ID: ').strip()
         while(checkStoreID(session, storeID)):
             print('Store ID doesn\'t exist in the database')
             storeID = input('Store ID: ').strip()
         employeeCountry = specialCheckInput(input('Employee Country: '), 50)
-        while emplyoeeCountry == None:
+        while employeeCountry == None:
             employeeCountry = specialCheckInput(input('Employee Country: '), 50)
         employeeState = specialCheckInput(input('Employee State: '), 50)
         while employeeState == None:
             employeeState = specialCheckInput(input('Employee State: '), 50)
         employeeCity = specialCheckInput(input('Employee City: '), 50)
-        while emplyoeeCity == None:
+        while employeeCity == None:
             employeeCity = specialCheckInput(input('Employee City: '), 50)
         employeeCityID = specialCheckCity(session, employeeCountry, employeeState, employeeCity)
         employeePhoneNumber = specialCheckNumberInput(input('Employee Phone number: '), 10)
