@@ -254,7 +254,7 @@ def addBuyer(session, buyerID: str, buyerFirstName: str, buyerLastName: str, buy
     Buyer.insert(session = session, value = Base.toComma(info))
 
 def addOrder(session, orderID: str, employeeID: str, booksSold: str, total: str) -> None:
-    orderDate = datetime.date.today().strftime('%Y-%m-%d')
+    orderDate = datetime.date.now().strftime("%Y-%m-%d %H:%M:%S")
     info = Base.toComma([orderID, orderDate, employeeID, booksSold, total])
     Orders.insert(session = session, value = info)
 
@@ -602,32 +602,34 @@ def optionOne(session) -> None: # Add new entry
     if query == '1': # 1. Place Order
         placeOrder(session)
     elif query == '2': # 2. Populate Store with books from Warehouse
-        bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+        bookTitle = input('Book Title: ')
         while(checkBookTitle(session, bookTitle)):
             print('Title isn\'t in the database')
-            bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+            bookTitle = input('Book Title: ')
         bookID = getBookIdByTitle(session, bookTitle)
         warehouseBooks = specialCheckNumberInputVaried(input('Amount of books to supply: '), 1, 6)
         while warehouseBooks == None:
             warehouseBooks = specialCheckNumberInputVaried(input('Amount of books to supply: '), 1, 6)
         currentWarehouseAmount = getWarehouseBooks(session, bookID)
         if currentWarehouseAmount == 0:
-            print(f'Warehouse currently out of stock of book {bookTitle}')
+            print(f'Warehouse currently out of stock on book {bookTitle}')
             return
         while(currentWarehouseAmount < int(warehouseBooks)):
             print(f'Warehouse currently in posession of {currentWarehouseAmount} books')
             print('Can not supply more than that')
             warehouseBooks = specialCheckNumberInputVaried(input('Amount of books to supply: '), 1, 6)
-        storeID = input('Store ID: ')
+            while warehouseBooks == None:
+                warehouseBooks = specialCheckNumberInputVaried(input('Amount of books to supply: '), 1, 6)
+        storeID = input('Store ID: ').strip()
         while(checkStoreID(session, storeID)):
             print('Store isn\'t in the database')
-            storeID = input('Store ID: ')
+            storeID = input('Store ID: ').strip()
         populateBookStore(session, bookID, storeID, int(warehouseBooks))
     elif query == '3': # 3. Supply books to warehouses
-        bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+        bookTitle = input('Book Title: ').strip()
         while(checkBookTitle(session, bookTitle)):
             print('Title isn\'t in the database')
-            bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+            bookTitle = input('Book Title: ').strip()
         bookID = getBookIdByTitle(session, bookTitle)
         supplierID = findSupplier(session)
         booksSupplied = specialCheckNumberInputVaried(input('Books supplied to warehouses: '), 1, 6)
@@ -637,9 +639,13 @@ def optionOne(session) -> None: # Add new entry
     elif query == '4': # 4. Add new book to sell
         bookID = Base.generateId()
         bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+        while bookTitle == None:
+            bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
         while(not checkBookTitle(session, bookTitle)):
             print('Book title already exists')
             bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
+            while bookTitle == None:
+                bookTitle = specialCheckStringNumberInput(input('Book Title: '), 36)
         genre = specialCheckInput(input('Genre: '), 36)
         while genre == None:
             genre = specialCheckInput(input('Genre: '), 36)
@@ -655,7 +661,6 @@ def optionOne(session) -> None: # Add new entry
         price = specialCheckTax(input('Price: '), 3)
         while price == None:
             price = specialCheckTax(input('Price: '), 3)
-        # TODO define publicationDate
         publicationDate = year + '-' + month + '-' + day
         authorFirstName = specialCheckInput(input('Author First Name: '), 36)
         while authorFirstName == None:
@@ -671,19 +676,23 @@ def optionOne(session) -> None: # Add new entry
         employeeLastName = specialCheckInput(input('Employee last name: '), 36)
         while employeeLastName == None:
             employeeLastName = specialCheckInput(input('Employee last name: '), 36)
-        jobTitle = specialCheckInput(input('Job Title: '), 36)
+        jobTitle = input('Job Title: ').strip()
         while(checkJob(session, jobTitle)):
             print('Job title doesn\'t exist')
-            jobTitle = specialCheckInput(input('Job Title: '), 36)
+            jobTitle = input('Job Title: ').strip()
         print(f'Salary for the job must be between {getMinSalary(session, jobTitle)} and {getMaxSalary(session, jobTitle)}')
         employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+        while employeeSalary == None:
+            employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
         while(checkSalary(session, jobTitle, int(employeeSalary))):
             print(f'Salary for the job must be between {getMinSalary(session, jobTitle)} and {getMaxSalary(session, jobTitle)}')
             employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
-        storeID = input('Store ID: ')
+            while employeeSalary == None:
+                employeeSalary = specialCheckNumberInput(input('Employee Salary: '), 6)
+        storeID = input('Store ID: ').strip()
         while(checkStoreID(session, storeID)):
             print('Store ID doesn\'t exist in the database')
-            storeID = input('Store ID: ')
+            storeID = input('Store ID: ').strip()
         employeeCountry = specialCheckInput(input('Employee Country: '), 50)
         while emplyoeeCountry == None:
             employeeCountry = specialCheckInput(input('Employee Country: '), 50)
@@ -1058,63 +1067,61 @@ def optionThree(session) -> None: # delete entry
     options = display_Delete_p1()
     query = getInput(options)
     if query == '1':
-        employeeID = specialCheckStringNumberInput(input('Employee ID: '), 36)
+        employeeID = input('Employee ID: ')
         while checkEmployeeID(session, employeeID):
             print('Employee ID is not in the database')
-            employeeID = specialCheckStringNumberInput(input('Employee ID: '), 36)
+            employeeID = input('Employee ID: ')
         deleteEmployee(session, employeeID)
     elif query == '2':
-        storeID = specialCheckStringNumberInput(input('Store ID: '), 36)
+        storeID = input('Store ID: ')
         while checkStoreID(session, storeID):
-            storeID = specialCheckStringNumberInput(input('Store ID: '), 36)
+            storeID = input('Store ID: ')
         deleteStore(session, storeID)
     elif query == '3':
-        ownerID = specialCheckStringNumberInput(input('Owner ID: '), 36)
+        ownerID = input('Owner ID: ')
         while checkOwnerID(session, orderID):
-            ownerID = specialCheckStringNumberInput(input('Owner ID: '), 36)
+            ownerID = input('Owner ID: ')
         deleteOwner(session, ownerID)
     elif query == '4':
-        bookID = specialCheckStringNumberInput(input('Book ID: '), 36)
-        while checkBookID(session, bookID):
-            bookID = specialCheckStringNumberInput(input('Book ID: '), 36)
+        bookID = input('Book ID: ')
         deleteBook(session, bookID)
     elif query == '5':
-        supplierID = specialCheckStringNumberInput(input('Supplier ID: '), 36)
+        supplierID = input('Supplier ID: ')
         while checkSupplierID(session, supplierID):
-            supplierID = specialCheckStringNumberInput(input('Supplier ID: '), 36)
+            supplierID = input('Supplier ID: ')
         deleteSupplier(session, supplierID)
     elif query == '6':
-        orderID = specialCheckStringNumberInput(input('Order ID: '), 36)
+        orderID = input('Order ID: ')
         while checkOrderID(session, orderID):
-            orderID = specialCheckStringNumberInput(input('Order ID: '), 36)
+            orderID = input('Order ID: ')
         deleteOrder(session, orderID)
     elif query == '7':
-        buyerID = specialCheckStringNumberInput(input('Buyer ID: '), 36)
+        buyerID = input('Buyer ID: ')
         while checkBuyerID(session, buyerID):
-            buyerID = specialCheckStringNumberInput(input('Buyer ID: '), 36)
+            buyerID = input('Buyer ID: ')
         deleteBuyer(session, buyerID)
     elif query == '8':
-        jobID = specialCheckStringNumberInput(input('Job ID: '), 36)
+        jobID = input('Job ID: ')
         while checkJobID(session, jobID):
-            jobID = specialCheckStringNumberInput(input('Job ID: '), 36)
+            jobID = input('Job ID: ')
         deleteJob(session, jobID)
     elif query == '9':
         options = displaye_Delete_p2()
         query = getInput(options)
         if query == '1':
-            addressID = specialCheckStringNumberInput(input('Address ID: '), 36)
+            addressID = input('Address ID: ')
             while checkAddressID(session, addressID):
-                addressID = specialCheckStringNumberInput(input('Address ID: '), 36)
+                addressID = input('Address ID: ')
             deleteAddress(session, addressID)
         elif query == '2':
-            cityID = specialCheckStringNumberInput(input('City ID: '), 36)
+            cityID = input('City ID: ')
             while checkCityID(session, cityID):
-                cityID = specialCheckStringNumberInput(input('City ID: '), 36)
+                cityID = input('City ID: ')
             deleteCity(session, cityID)
         elif query == '3':
-            authorID = specialCheckStringNumberInput(input('Author ID: '), 36)
+            authorID = input('Author ID: ')
             while checkAuthorID(session, authorID):
-                authorID = specialCheckStringNumberInput(input('Author ID: '), 36)
+                authorID = input('Author ID: ')
             deleteAuthor(session, authorID)
         elif query == '4':
             return optionThree()
