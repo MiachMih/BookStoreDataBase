@@ -1,0 +1,11 @@
+Create Store & Owner
+Hire employee
+Add book > create > add to warehouse > add to store
+sell book
+
+order more books than in warehouse or store
+misspelled book title
+
+538
+remove case sensitivity
+check no blank error

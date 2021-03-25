@@ -37,30 +37,37 @@ alter table ord.SupplierOrder
 */
 
 alter table item.Warehouse
-	add foreign key(id) references item.Books(id);
-	on delete cascade;
+	add foreign key(id) references item.Books(id)
+	on delete cascade
+	go
 
 alter table store.Stores
-	add foreign key(addressId) references location.Addressess(id);
-	on delete cascade;
+	add foreign key(addressId) references location.Addressess(id)
+	on delete cascade
+	go
 alter table store.Stores
-	add foreign key(ownerId) references store.Owners(id);
-	on delete cascade;
+	add foreign key(ownerId) references store.Owners(id)
+	on delete cascade
+	go
 
 alter table work.Employees
-	add foreign key(addressId) references location.Addressess(id);
-	on delete cascade;
+	add foreign key(addressId) references location.Addressess(id)
+	on delete cascade
+	go
 alter table work.Employees
-	add foreign key(jobId) references work.Jobs(id);
-	on delete cascade;
+	add foreign key(jobId) references work.Jobs(id)
+	on delete cascade
+	go
 
 alter table location.Addressess
-	add foreign key(cityId) references location.Cities(id);
-	on delete cascade;
+	add foreign key(cityId) references location.Cities(id)
+	on delete cascade
+	go
 
 alter table ord.Buyer
-	add foreign key(addressId) references location.Addressess(id);
-	on delete cascade;
+	add foreign key(addressId) references location.Addressess(id)
+	on delete cascade
+	go
 /*
 alter table ord.Orders
 	add foreign key(bookId) references item.Books(id)
@@ -68,8 +75,10 @@ alter table ord.Orders
 */
 alter table ord.Orders
 	add foreign key(employeeId) references work.Employees(id)
-	on delete cascade;
+	on delete cascade
+	go
 
 alter table item.Books
-	add foreign key(authorId) references item.Authors(id);
-	on delete cascade;
+	add foreign key(authorId) references item.Authors(id)
+	on delete cascade
+	go

@@ -89,24 +89,24 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
         for i, v in zip(id.split(', '), idVALUE.split(', ')):
             query = query + f' {v} = \'{i}\' and'
         query = query[:-3]
-       session.execute(f'delete from {cls.schema}.{cls.table} where{query}')
+        session.execute(f'delete from {cls.schema}.{cls.table} where{query}')
 
     @classmethod # accepts comma separtated columns (returns all rows with information in specified columns)
                               # accepts comma separtated  column and value (returns a rows based on matching values in a columns )
                               # accepts  a value (finds an exact match of the value in any column and returns the rows)
                               #returns pandas DataFrame
-    def select(cls, column: str =None, value: str =None) -> pd.DataFrame:
+    def select(cls, session, column: str =None, value: str =None) -> pd.DataFrame:
         if column != None and value !=None: # columns and values are supplied
             query  = f'select * from {cls.schema}.{cls.table} where'
             for col, val in zip(column.split(', '), value.split(', ')):
                 query = query + f' {col} = \'{val}\' and'
             query = query[:-3]
-            return pd.read_sql_query(query, cls.conn)
+            return pd.read_sql_query(query, session.connection())
         if column != None: # only columns supplied
-            return pd.read_sql_query(f'select {column} from {cls.schema}.{cls.table}', cls.conn)
+            return pd.read_sql_query(f'select {column} from {cls.schema}.{cls.table}', session.connection())
         if value !=None: # only value supplied
             value = [value]
-            x = pd.read_sql_query(f'select * from {cls.schema}.{cls.table}', cls.conn)
+            x = pd.read_sql_query(f'select * from {cls.schema}.{cls.table}', session.connection())
             l = pd.DataFrame()
             for col in x.columns:
                 filt = x[col].isin(value)
@@ -114,4 +114,4 @@ WHERE TABLE_NAME = \'{cls.table}\' AND TABLE_SCHEMA= \'{cls.schema}\'''', cls.co
                    l = pd.concat([l, x.loc[filt]])
             return l.drop_duplicates()
 
-        return pd.read_sql_query(f'select * from {cls.schema}.{cls.table}', cls.conn)
+        return pd.read_sql_query(f'select * from {cls.schema}.{cls.table}', session.connection())

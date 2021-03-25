@@ -76,7 +76,7 @@ CREATE TABLE location.Addressess(
 id nvarchar(36) primary key,
 address nvarchar(50) not null,
 cityId nvarchar(36) not null,
-phoneNumber nvarchar(36) not null unique
+phoneNumber nvarchar(36) not null
 );
 GO
 
