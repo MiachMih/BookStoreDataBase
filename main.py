@@ -491,38 +491,38 @@ def editBuyer(session, columns: str, values: str, buyerID: str) -> None: # edits
     Buyer.update(session = session, column = columns, value = values, id = buyerID)
 
 # deleter
-def deleteStore(session):
-    pass
+def deleteStore(session, storeID):
+    Stores.delete(session = session, id = storeID)
 
-def deleteBook(session):
-    pass
+def deleteBook(session, bookID):
+    Books.delete(session = session, id = bookID)
 
-def deleteEmployee(session):
-    pass
+def deleteEmployee(session, employeeID):
+    Employees.delete(session = session, id = employeeID)
 
-def deleteSupplier(session):
-    pass
+def deleteSupplier(session, supplierID):
+    Suppliers.delete(session = session, id = supplierID)
 
-def deleteOwner(session):
-    pass
+def deleteOwner(session, ownerID):
+    Owners.delete(session = session, id = ownerID)
 
-def deleteOrder(session):
-    pass
+def deleteOrder(session, orderID):
+    Orders.delete(session = session, id = orderID)
 
-def deleteBuyer(session):
-    pass
+def deleteBuyer(session, buyerID):
+    Buyer.delete(session = session, id = buyerID)
 
-def deleteJob(session):
-    pass
+def deleteJob(session, jobID):
+    Jobs.delete(session = session, id = jobID)
 
-def deleteAddress(session):
-    pass
+def deleteAddress(session, addressID):
+    Addressess.delete(session = session, id = addressID)
 
-def deleteCity(session):
-    pass
+def deleteCity(session, cityID):
+    Cities.delete(session = session, id = cityID)
 
-def deleteAuthor(session):
-    pass
+def deleteAuthor(session, authorID):
+    Authors.delete(session = session, id = authorID)
 
 # display
 def display_main() -> list:
@@ -565,16 +565,24 @@ def display_Edit_p2() -> list:
     print('0. get back to main page')
     return range(0, 5)
 
-def display_Delete() -> list:
+def display_Delete_p1() -> list:
     print('1. Delete Employee')
-    print('2. Delete Store & Owner')
-    print('3. Delete ')
-    print('')
-    print('')
-    print('')
-    print('')
-    print('')
-    print('')
+    print('2. Delete Store')
+    print('3. Delete Owner')
+    print('4. Delete Book')
+    print('5. Delete Supplier')
+    print('6. DeleteOrder')
+    print('7. Delete Buyer')
+    print('8. Delete Job')
+    print('9. Next Page')
+    return range(0, 10)
+
+def display_Delete_p2() -> list:
+    print('1. Delete Address')
+    print('2. Delete City')
+    print('3. Delete Author')
+    print('4. Previous Page')
+    return range(0, 5)
 
 def getInput(options: list) -> str:
     query = input('Your input: ').replace('.', '')
@@ -755,6 +763,7 @@ def optionOne(session) -> None: # Add new entry
             ownerLastName = specialCheckInput(input('Owner last name: '), 36)
         ownerCompanyName = specialCheckStringNumberInput(input('Owner company name: '), 50)
         while ownerCompanyName == None:
+            ownerCompanyName = specialCheckStringNumberInput(input('Owner company name: '), 50)
         addOwnerStore(session, ownerID, ownerFirstName, ownerLastName, ownerAddressID, ownerCompanyName, storeID, storeAddressID, taxP)
     elif query == '7': # 7. Add new supplier
         supplierFirstName = specialCheckInput(input('Supplier First Name: '), 36)
@@ -1046,26 +1055,69 @@ def optionTwo(session) -> None:  # edit entry, you have to know the id of the ta
 
 @sess
 def optionThree(session) -> None: # delete entry
-    options = display_Delete()
+    options = display_Delete_p1()
     query = getInput(options)
     if query == '1':
-        pass
+        employeeID = specialCheckStringNumberInput(input('Employee ID: '), 36)
+        while checkEmployeeID(session, employeeID):
+            print('Employee ID is not in the database')
+            employeeID = specialCheckStringNumberInput(input('Employee ID: '), 36)
+        deleteEmployee(session, employeeID)
     elif query == '2':
-        pass
+        storeID = specialCheckStringNumberInput(input('Store ID: '), 36)
+        while checkStoreID(session, storeID):
+            storeID = specialCheckStringNumberInput(input('Store ID: '), 36)
+        deleteStore(session, storeID)
     elif query == '3':
-        pass
+        ownerID = specialCheckStringNumberInput(input('Owner ID: '), 36)
+        while checkOwnerID(session, orderID):
+            ownerID = specialCheckStringNumberInput(input('Owner ID: '), 36)
+        deleteOwner(session, ownerID)
     elif query == '4':
-        pass
+        bookID = specialCheckStringNumberInput(input('Book ID: '), 36)
+        while checkBookID(session, bookID):
+            bookID = specialCheckStringNumberInput(input('Book ID: '), 36)
+        deleteBook(session, bookID)
     elif query == '5':
-        pass
+        supplierID = specialCheckStringNumberInput(input('Supplier ID: '), 36)
+        while checkSupplierID(session, supplierID):
+            supplierID = specialCheckStringNumberInput(input('Supplier ID: '), 36)
+        deleteSupplier(session, supplierID)
     elif query == '6':
-        pass
+        orderID = specialCheckStringNumberInput(input('Order ID: '), 36)
+        while checkOrderID(session, orderID):
+            orderID = specialCheckStringNumberInput(input('Order ID: '), 36)
+        deleteOrder(session, orderID)
     elif query == '7':
-        pass
+        buyerID = specialCheckStringNumberInput(input('Buyer ID: '), 36)
+        while checkBuyerID(session, buyerID):
+            buyerID = specialCheckStringNumberInput(input('Buyer ID: '), 36)
+        deleteBuyer(session, buyerID)
     elif query == '8':
-        pass
+        jobID = specialCheckStringNumberInput(input('Job ID: '), 36)
+        while checkJobID(session, jobID):
+            jobID = specialCheckStringNumberInput(input('Job ID: '), 36)
+        deleteJob(session, jobID)
     elif query == '9':
-        pass
+        options = displaye_Delete_p2()
+        query = getInput(options)
+        if query == '1':
+            addressID = specialCheckStringNumberInput(input('Address ID: '), 36)
+            while checkAddressID(session, addressID):
+                addressID = specialCheckStringNumberInput(input('Address ID: '), 36)
+            deleteAddress(session, addressID)
+        elif query == '2':
+            cityID = specialCheckStringNumberInput(input('City ID: '), 36)
+            while checkCityID(session, cityID):
+                cityID = specialCheckStringNumberInput(input('City ID: '), 36)
+            deleteCity(session, cityID)
+        elif query == '3':
+            authorID = specialCheckStringNumberInput(input('Author ID: '), 36)
+            while checkAuthorID(session, authorID):
+                authorID = specialCheckStringNumberInput(input('Author ID: '), 36)
+            deleteAuthor(session, authorID)
+        elif query == '4':
+            return optionThree()
 ########################
 while(True):
     options = display_main()
@@ -1075,7 +1127,7 @@ while(True):
     elif query == '2': # edit entry
         optionTwo()
     elif query == '3': # delete entry
-        print('We are under construction right now, please check in later.')
+        optionThree()
         # optionThree()
     else:
         print('Exiting program')
