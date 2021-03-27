@@ -455,9 +455,13 @@ def placeOrder(session):
     employeeID = input('Employee ID: ')
     while(checkEmployeeID(session, employeeID)):
         employeeID = input('Employee ID: ')
-    amountOfBooksToBuy = input('How many books to buy: ')
+    amountOfBooksToBuy = specialCheckNumberInputVaried(input('How many books to buy: '), 1, 4)
+    while amountOfBooksToBuy == None:
+        amountOfBooksToBuy = specialCheckNumberInputVaried(input('How many books to buy: '), 1, 4)
     while(getNumberOfBooksInStore(session, bookID, storeID) < int(amountOfBooksToBuy) or int(amountOfBooksToBuy) < 0):
-        amountOfBooksToBuy = input('How many books to buy: ')
+        amountOfBooksToBuy = specialCheckNumberInputVaried(input('How many books to buy: '), 1, 4)
+        while amountOfBooksToBuy == None:
+            amountOfBooksToBuy = specialCheckNumberInputVaried(input('How many books to buy: '), 1, 4)
     orderID = Base.generateId()
     tax = getTax(session, storeID)
     total = calculateTotal(session, bookID, int(amountOfBooksToBuy), tax)
