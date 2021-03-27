@@ -29,19 +29,19 @@ import datetime
 from datetime import datetime as dt
 
 # checker return true if empty
-def checkOrderID(session, orderID) -> bool:
+def checkOrderID(session, orderID: str) -> bool:
     return Orders.select(session = session, column = 'id', value = orderID).empty
 
-def checkOrderList(session, columns, values) -> bool:
+def checkOrderList(session, columns: str, values: str) -> bool:
     return Orders.select(session = session, column = columns, value = values).empty
 
 def checkStoreID(session, storeID: str) -> bool:
     return Stores.select(session = session, column = 'id', value = storeID).empty
 
-def checkStore(session, storeAddressID):
+def checkStoreAddressID(session, storeAddressID: str) -> bool:
     return Stores.select(session = session, column = 'addressId', value = storeAddressID).empty
 
-def checkStoreList(session, columns, values) -> bool:
+def checkStoreList(session, columns: str, values: str) -> bool:
     return Stores.select(session = session, column = columns, value = values).empty
 
 def checkBookTitle(session, bookTitle: str) -> bool:
@@ -57,20 +57,17 @@ def checkEmployee(session, salary: str, addressID: str, firstName: str, lastName
 def checkEmployeeList(session, columns: str, values: str) -> bool:
     return Employees.select(session = session, column = columns, value = values).empty
 
-def checkOwnerID(session, ownerID) -> bool:
+def checkOwnerID(session, ownerID: str) -> bool:
     return Owners.select(session = session, column = 'id', value = ownerID).empty
 
-def checkOwnerList(session, columns, values) -> bool:
+def checkOwnerList(session, columns: str, values: str) -> bool:
     return Owners.select(session = session, column = columns, value = values).empty
 
-def checkBookID(session, bookID) -> bool:
+def checkBookID(session, bookID: str) -> bool:
     return Books.select(session = session, column = 'id', value = book).empty
 
-def checkBookList(session, columns, values) -> bool:
+def checkBookList(session, columns: str, values: str) -> bool:
     return Books.select(session = session, column = columns, value = values).empty
-
-def checkCreditCard(session, creditCardNumber: str) -> bool:
-    pass # TODO
 
 def checkSalary(session, jobTitle: str, salary: int) -> bool:
     job = Jobs.select(session = session, column = 'id', value = jobTitle)
@@ -79,10 +76,10 @@ def checkSalary(session, jobTitle: str, salary: int) -> bool:
 def checkJob(session, jobTitle: str) -> bool:
     return Jobs.select(session = session, column = 'id', value = jobTitle).empty
 
-def checkJobID(session, jobID) -> bool:
+def checkJobID(session, jobID: str) -> bool:
     return Jobs.select(session = session, column = 'id', value = id).empty
 
-def checkJobList(session, columns, values) -> bool:
+def checkJobList(session, columns: str, values: str) -> bool:
     return Jobs.select(session = session, column = columns, value = values).empty
 
 def checkAddressID(session, addressID: str) -> bool:
@@ -92,7 +89,7 @@ def checkAddress(session, address: str, cityID: str, phoneNumber: str) -> bool:
     info = Base.toComma([address, cityID, phoneNumber])
     return Addressess.select(session = session, column = 'address, cityId, phoneNumber', value = info).empty
 
-def checkAddressList(session, columns, values) -> bool:
+def checkAddressList(session, columns: str, values: str) -> bool:
     return Addressess.select(session = session, column = columns, value = values)
 
 def checkSupplierFirstName(session, suppliers: pd.DataFrame, firstName: str) -> bool:
@@ -111,10 +108,10 @@ def checkBuyer(session, buyerFirstName: str, buyerLastName: str, buyerCreditCard
     info = Base.toComma([buyerFirstName, buyerLastName, buyerCreditCard])
     return Buyer.select(session = session, column = 'firstName, lastName, creditCardNumber', value = info).empty
 
-def checkBuyerID(session, buyerID):
+def checkBuyerID(session, buyerID: str):
     return Buyer.select(session = session, column = 'id', value = buyerID).empty
 
-def checkBuyerList(session, columns, values):
+def checkBuyerList(session, columns: str, values: str):
     return Buyer.select(session = session, column = columns, value = values).empty
 
 def checkAuthorID(session, authorID: str) -> bool:
@@ -134,7 +131,7 @@ def checkSupplier(session, supplierFirstName: str, supplierLastName: str, suppli
     info = Base.toComma([supplierFirstName, supplierLastName, supplierAddressID, supplierCompanyName])
     return Suppliers.select(session = session, column = 'firstName, lastName, addressId, companyName', value = info).empty
 
-def checkSupplierList(session, columns, values) -> bool:
+def checkSupplierList(session, columns: str, values: str) -> bool:
     return Suppliers.select(session = session, column = columns, value = values).empty
 
 def checkCityID(session, cityID: str) -> bool:
@@ -144,7 +141,7 @@ def checkCity(session, country: str, state: str, city: str) -> bool:
     info = Base.toComma([country, state, city])
     return Cities.select(session = session, column = 'countryName, stateName, cityName', value = info).empty
 
-def checkCityList(session, columns, values) -> bool:
+def checkCityList(session, columns: str, values: str) -> bool:
     return Cities.select(session = session, column = columns, value = values).empty
 # specialChecker
 def specialCheckInput(inpt: str, allowedMaxLength: int) -> str:
@@ -497,37 +494,37 @@ def editBuyer(session, columns: str, values: str, buyerID: str) -> None: # edits
     Buyer.update(session = session, column = columns, value = values, id = buyerID)
 
 # deleter
-def deleteStore(session, storeID):
+def deleteStore(session, storeID: str) -> None:
     Stores.delete(session = session, id = storeID)
 
-def deleteBook(session, bookID):
+def deleteBook(session, bookID: str) -> None:
     Books.delete(session = session, id = bookID)
 
-def deleteEmployee(session, employeeID):
+def deleteEmployee(session, employeeID: str) -> None:
     Employees.delete(session = session, id = employeeID)
 
-def deleteSupplier(session, supplierID):
+def deleteSupplier(session, supplierID: str) -> None:
     Suppliers.delete(session = session, id = supplierID)
 
-def deleteOwner(session, ownerID):
+def deleteOwner(session, ownerID: str) -> None:
     Owners.delete(session = session, id = ownerID)
 
-def deleteOrder(session, orderID):
+def deleteOrder(session, orderID: str) -> None:
     Orders.delete(session = session, id = orderID)
 
-def deleteBuyer(session, buyerID):
+def deleteBuyer(session, buyerID: str) -> None:
     Buyer.delete(session = session, id = buyerID)
 
-def deleteJob(session, jobID):
+def deleteJob(session, jobID: str) -> None:
     Jobs.delete(session = session, id = jobID)
 
-def deleteAddress(session, addressID):
+def deleteAddress(session, addressID: str) -> None:
     Addressess.delete(session = session, id = addressID)
 
-def deleteCity(session, cityID):
+def deleteCity(session, cityID: str) -> None:
     Cities.delete(session = session, id = cityID)
 
-def deleteAuthor(session, authorID):
+def deleteAuthor(session, authorID: str) -> None:
     Authors.delete(session = session, id = authorID)
 
 # display
@@ -744,7 +741,7 @@ def optionOne(session) -> None: # Add new entry
         while storeAddress == None:
             storeAddress = specialCheckStringNumberInput(input('Store Address: '), 50)
         storeAddressID = specialCheckAddress(session, storeAddress, storeCityID, storePhoneNumber)
-        if not checkStore(session, storeAddressID):
+        if not checkStoreAddressID(session, storeAddressID):
             print('Store already exists')
             return
         storeID = Base.generateId()

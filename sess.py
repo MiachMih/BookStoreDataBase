@@ -11,7 +11,7 @@ def sess(function): # creates a session and shares that session with the functio
             session.commit()
         except:
             session.rollback()
-            raise
+            print('There was an error')
         finally:
             session.close()
         return wrapper
