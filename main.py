@@ -158,6 +158,8 @@ def specialCheckNumberInputVaried(inpt: str, allowedMinLength: int, allowedMaxLe
     fixedInput = ''
     for num in inpt.strip():
         if num.isnumeric():
+            if int(num) < 0:
+                num *= (-1)
             fixedInput += num
     if fixedInput == '':
         return print(f'Allowed length is between {allowedMinLength} and {allowedMaxLength}')
@@ -170,7 +172,11 @@ def specialCheckNumberInput(inpt: str, allowedLength: int) -> str:
     fixedInput = ''
     for num in inpt.strip():
         if num.isnumeric():
+            if int(num) < 0:
+                num *= (-1)
             fixedInput += num
+    if fixedInput == '':
+        return print(f'Allowed length is strictly {allowedLength}')
     fixedInput = str(int(fixedInput))
     if len(fixedInput) != allowedLength:
         return print(f'The allowed length {allowedLength}, everything that isn\'t a number is removed')
@@ -450,7 +456,7 @@ def placeOrder(session):
     while(checkEmployeeID(session, employeeID)):
         employeeID = input('Employee ID: ')
     amountOfBooksToBuy = input('How many books to buy: ')
-    while(getNumberOfBooksInStore(session, bookID, storeID) < int(amountOfBooksToBuy)):
+    while(getNumberOfBooksInStore(session, bookID, storeID) < int(amountOfBooksToBuy) or int(amountOfBooksToBuy) < 0):
         amountOfBooksToBuy = input('How many books to buy: ')
     orderID = Base.generateId()
     tax = getTax(session, storeID)
